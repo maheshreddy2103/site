@@ -1,0 +1,768 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String      @id @default(cuid())
+  email          String      @unique
+  mobile         String      @unique
+  passwordHash   String
+  role           Role        @relation(fields: [roleId], references: [id])
+  roleId         String
+  customer       Customer?   @relation(fields: [customerId], references: [id])
+  customerId     String?     @unique
+  employee       Employee?   @relation(fields: [employeeId], references: [id])
+  employeeId     String?     @unique
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  sessions       Session[]
+  auditLogs      AuditLog[]  @relation("userAuditLogs")
+}
+
+model Role {
+  id          String       @id @default(cuid())
+  name        String       @unique
+  description String
+  permissions Permission[]
+  users       User[]
+  createdAt   DateTime     @default(now())
+}
+
+model Permission {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  description String
+  roles       Role[]
+}
+
+model Branch {
+  id                    String       @id @default(cuid())
+  name                  String       @unique
+  address               String
+  city                  String
+  state                 String
+  pincode               String
+  phone                 String
+  email                 String
+  manager               Employee?    @relation("BranchManager", fields: [managerId], references: [id])
+  managerId             String?      @unique
+  employees             Employee[]   @relation("BranchEmployees")
+  customerApplications  CustomerApplication[]
+  inventory             Inventory[]
+  retailStores          RetailPartner[]
+  createdAt             DateTime     @default(now())
+}
+
+model Department {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  employees Employee[]
+  createdAt DateTime   @default(now())
+}
+
+model Customer {
+  id                  String             @id @default(cuid())
+  customerId          String             @unique
+  membershipId        String             @unique
+  firstName           String
+  lastName            String
+  email               String             @unique
+  mobile              String             @unique
+  dateOfBirth         DateTime
+  address             String
+  city                String
+  state               String
+  pincode             String
+  nomineeName         String?
+  nomineeRelation     String?
+  kycStatus           KycStatus          @default(PENDING)
+  kycDocuments        KycDocument[]
+  membership          Membership?
+  wallet              Wallet?
+  referrals           Referral[]         @relation("ReferralParent")
+  referredBy          Referral?          @relation("ReferralCustomer")
+  leads               Lead[]
+  applications        CustomerApplication[]
+  payments            Payment[]
+  supportTickets      SupportTicket[]
+  orders              Order[]
+  rewardPoints        RewardPoint[]
+  rewardAllocations   RewardAllocation[]
+  notifications       Notification[]
+  user                User?
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+}
+
+enum KycStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+model Employee {
+  id                 String             @id @default(cuid())
+  employeeId         String             @unique
+  firstName          String
+  lastName           String
+  email              String             @unique
+  mobile             String             @unique
+  department         Department?        @relation(fields: [departmentId], references: [id])
+  departmentId       String?
+  branch             Branch?            @relation("BranchEmployees", fields: [branchId], references: [id])
+  branchId           String?
+  managesBranch      Branch?            @relation("BranchManager")
+  designation        String
+  reportingTo        Employee?          @relation("ReportingTree", fields: [reportingToId], references: [id])
+  reportingToId      String?
+  subordinates       Employee[]         @relation("ReportingTree")
+  status             EmployeeStatus     @default(PENDING_APPROVAL)
+  documents          EmployeeDocument[]
+  user               User?
+  leads              Lead[]
+  handledApplications CustomerApplication[]
+  notifications      Notification[]
+  createdExpenses    Expense[]          @relation("ExpenseCreatedBy")
+  approvedExpenses   Expense[]          @relation("ExpenseApprovedBy")
+  generatedReports   Report[]
+  approvedAllocations RewardAllocation[]
+  requestedApprovals Approval[]          @relation("ApprovalRequestedBy")
+  approvedApprovals  Approval[]          @relation("ApprovalApprovedBy")
+  salaries           Salary[]
+  commissions        Commission[]
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+}
+
+model EmployeeDocument {
+  id          String    @id @default(cuid())
+  employee    Employee  @relation(fields: [employeeId], references: [id])
+  employeeId  String
+  type        String
+  filePath    String
+  verified    Boolean   @default(false)
+  uploadedAt  DateTime  @default(now())
+}
+
+enum EmployeeStatus {
+  PENDING_APPROVAL
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+model MembershipPlan {
+  id              String        @id @default(cuid())
+  name            String        @unique
+  durationMonths  Int
+  interestRate    Float
+  minProductValue Int
+  maxProductValue Int
+  terms           String
+  memberships     Membership[]
+  createdAt       DateTime      @default(now())
+}
+
+model ProductCategory {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  products  Product[]
+  createdAt DateTime  @default(now())
+}
+
+model Product {
+  id            String            @id @default(cuid())
+  sku           String            @unique
+  name          String
+  brand         String
+  category      ProductCategory   @relation(fields: [categoryId], references: [id])
+  categoryId    String
+  description   String
+  price         Int
+  stock         Int
+  warranty      String
+  features      String
+  retailPartner RetailPartner? @relation(fields: [retailId], references: [id])
+  retailId      String?
+  supplier      Supplier?      @relation(fields: [supplierId], references: [id])
+  supplierId    String?
+  memberships   Membership[]
+  offers        Offer[]
+  orders        Order[]
+  inventory     Inventory[]
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+}
+
+model RetailPartner {
+  id           String    @id @default(cuid())
+  name         String
+  address      String
+  city         String
+  state        String
+  pincode      String
+  phone        String
+  email        String
+  openingHours String
+  website      String?
+  branch       Branch?   @relation(fields: [branchId], references: [id])
+  branchId     String?
+  products     Product[]
+  createdAt    DateTime  @default(now())
+}
+
+model Order {
+  id             String          @id @default(cuid())
+  orderId        String          @unique
+  customer       Customer        @relation(fields: [customerId], references: [id])
+  customerId     String
+  product        Product         @relation(fields: [productId], references: [id])
+  productId      String
+  quantity       Int              @default(1)
+  price          Int
+  membership     Membership?     @relation("OrderMembership", fields: [membershipId], references: [id])
+  membershipId   String?
+  payments       Payment[]
+  status         OrderStatus      @default(APPLICATION)
+  paymentStatus  PaymentStatus    @default(PENDING)
+  trackingCode   String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+}
+
+enum OrderStatus {
+  APPLICATION
+  APPROVED
+  PAYMENT_IN_PROGRESS
+  READY
+  DISPATCHED
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+  RETURNED
+}
+
+model Payment {
+  id               String          @id @default(cuid())
+  transactionId    String          @unique
+  customer         Customer        @relation(fields: [customerId], references: [id])
+  customerId       String
+  order            Order?          @relation(fields: [orderId], references: [id])
+  orderId          String?
+  emiSchedules     EmiSchedule[]
+  amount           Int
+  method           PaymentMethod
+  status           PaymentStatus   @default(PENDING)
+  gatewayResponse  Json?
+  dueDate          DateTime?
+  paidAt           DateTime?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+}
+
+enum PaymentMethod {
+  CARD
+  UPI
+  WALLET
+  BANK_TRANSFER
+  CASH
+  OTHER
+}
+
+enum PaymentStatus {
+  SUCCESS
+  PENDING
+  FAILED
+  REFUNDED
+  OVERDUE
+}
+
+model EmiSchedule {
+  id           String      @id @default(cuid())
+  membership   Membership  @relation(fields: [membershipId], references: [id])
+  membershipId String
+  dueDate      DateTime
+  amount       Int
+  status       PaymentStatus @default(PENDING)
+  paidAt       DateTime?
+  payment      Payment?    @relation(fields: [paymentId], references: [id])
+  paymentId    String?
+  createdAt    DateTime    @default(now())
+}
+
+model Wallet {
+  id                 String           @id @default(cuid())
+  customer           Customer         @relation(fields: [customerId], references: [id])
+  customerId         String           @unique
+  balance            Int              @default(0)
+  rewardCredits      Int              @default(0)
+  promotionalCredits Int              @default(0)
+  transactions       WalletTransaction[]
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+}
+
+model WalletTransaction {
+  id            String    @id @default(cuid())
+  wallet        Wallet    @relation(fields: [walletId], references: [id])
+  walletId      String
+  type          TransactionType
+  amount        Int
+  description   String
+  createdAt     DateTime  @default(now())
+}
+
+enum TransactionType {
+  CREDIT
+  DEBIT
+}
+
+model RewardPoint {
+  id            String         @id @default(cuid())
+  customer      Customer       @relation(fields: [customerId], references: [id])
+  customerId    String
+  points        Int            @default(0)
+  reason        String
+  expiresAt     DateTime?
+  createdAt     DateTime      @default(now())
+}
+
+model RewardCampaign {
+  id               String             @id @default(cuid())
+  name             String             @unique
+  description      String
+  startDate        DateTime
+  endDate          DateTime
+  status           CampaignStatus     @default(DRAFT)
+  eligibility      Json
+  rewardDetails    Json
+  totalRewards     Int
+  rewardAllocations RewardAllocation[]
+  auditLogs        AuditLog[]         @relation("campaignAuditLogs")
+  approvals        Approval[]         @relation("CampaignApprovals")
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+}
+
+enum CampaignStatus {
+  DRAFT
+  PENDING_APPROVAL
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+model RewardAllocation {
+  id             String          @id @default(cuid())
+  campaign        RewardCampaign @relation(fields: [campaignId], references: [id])
+  campaignId      String
+  customer        Customer       @relation(fields: [customerId], references: [id])
+  customerId      String
+  rewardType      String
+  rewardValue     Int
+  status          RewardStatus   @default(PENDING)
+  approvedBy      Employee?      @relation(fields: [approvedById], references: [id])
+  approvedById    String?
+  approvedAt      DateTime?
+  fulfilledAt     DateTime?
+  auditLogs       AuditLog[]     @relation("rewardAllocationAuditLogs")
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+}
+
+enum RewardStatus {
+  PENDING
+  APPROVED
+  FULFILLED
+  REJECTED
+}
+
+model Referral {
+  id              String      @id @default(cuid())
+  customer        Customer    @relation("ReferralCustomer", fields: [customerId], references: [id])
+  customerId      String      @unique
+  code            String      @unique
+  referredBy      Customer?   @relation("ReferralParent", fields: [referredById], references: [id])
+  referredById    String?
+  successfulCount Int         @default(0)
+  createdAt       DateTime    @default(now())
+}
+
+model Lead {
+  id              String        @id @default(cuid())
+  leadId          String        @unique
+  customer        Customer?     @relation(fields: [customerId], references: [id])
+  customerId      String?
+  agent           Employee?     @relation(fields: [agentId], references: [id])
+  agentId         String?
+  source          String
+  status          LeadStatus    @default(NEW)
+  followUps       FollowUp[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  CONVERTED
+  LOST
+}
+
+model CustomerApplication {
+  id              String         @id @default(cuid())
+  applicationId   String         @unique
+  customer        Customer       @relation(fields: [customerId], references: [id])
+  customerId      String
+  agent           Employee?      @relation(fields: [agentId], references: [id])
+  agentId         String?
+  status          ApplicationStatus @default(PENDING)
+  branch          Branch?        @relation(fields: [branchId], references: [id])
+  branchId        String?
+  notes           String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+}
+
+enum ApplicationStatus {
+  PENDING
+  VERIFIED
+  APPROVED
+  REJECTED
+}
+
+model KycDocument {
+  id          String     @id @default(cuid())
+  customer    Customer   @relation(fields: [customerId], references: [id])
+  customerId  String
+  type        String
+  filePath    String
+  verified    Boolean    @default(false)
+  uploadedAt  DateTime   @default(now())
+}
+
+model SupportTicket {
+  id           String          @id @default(cuid())
+  ticketId     String          @unique
+  customer     Customer        @relation(fields: [customerId], references: [id])
+  customerId   String
+  category     TicketCategory
+  priority     TicketPriority
+  status       TicketStatus    @default(OPEN)
+  subject      String
+  description  String
+  messages     TicketMessage[]
+  attachments  TicketAttachment[]
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+}
+
+enum TicketCategory {
+  PAYMENT
+  EMI
+  MEMBERSHIP
+  PRODUCT
+  DELIVERY
+  REWARD
+  ACCOUNT
+  TECHNICAL
+  COMPLAINT
+  OTHER
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  WAITING_FOR_CUSTOMER
+  ESCALATED
+  RESOLVED
+  CLOSED
+}
+
+model TicketMessage {
+  id           String         @id @default(cuid())
+  ticket       SupportTicket  @relation(fields: [ticketId], references: [id])
+  ticketId     String
+  sender       String
+  message      String
+  createdAt    DateTime       @default(now())
+}
+
+model TicketAttachment {
+  id           String         @id @default(cuid())
+  ticket       SupportTicket  @relation(fields: [ticketId], references: [id])
+  ticketId     String
+  filePath     String
+  uploadedAt   DateTime       @default(now())
+}
+
+model FollowUp {
+  id           String    @id @default(cuid())
+  lead         Lead      @relation(fields: [leadId], references: [id])
+  leadId       String
+  dueAt        DateTime
+  note         String
+  completed    Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+}
+
+model Notification {
+  id           String         @id @default(cuid())
+  customer     Customer?      @relation(fields: [customerId], references: [id])
+  customerId   String?
+  employee     Employee?      @relation(fields: [employeeId], references: [id])
+  employeeId   String?
+  title        String
+  message      String
+  channel      NotificationChannel
+  deliveredAt  DateTime?
+  createdAt    DateTime       @default(now())
+}
+
+enum NotificationChannel {
+  EMAIL
+  SMS
+  WHATSAPP
+  PUSH
+}
+
+model Offer {
+  id           String      @id @default(cuid())
+  title        String
+  description  String
+  startDate    DateTime
+  endDate      DateTime
+  active       Boolean     @default(true)
+  products     Product[]
+  createdAt    DateTime    @default(now())
+}
+
+model MarketingCampaign {
+  id           String      @id @default(cuid())
+  title        String
+  description  String
+  channel      String
+  startDate    DateTime
+  endDate      DateTime
+  budget       Int
+  status       CampaignStatus @default(DRAFT)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model Supplier {
+  id             String          @id @default(cuid())
+  name           String
+  contactName    String
+  email          String
+  phone          String
+  address        String
+  city           String
+  state          String
+  pincode        String
+  products       Product[]
+  purchaseOrders PurchaseOrder[]
+  createdAt      DateTime        @default(now())
+}
+
+model PurchaseOrder {
+  id           String      @id @default(cuid())
+  orderNumber  String      @unique
+  supplier     Supplier    @relation(fields: [supplierId], references: [id])
+  supplierId   String
+  amount       Int
+  status       PurchaseStatus @default(PENDING)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+enum PurchaseStatus {
+  PENDING
+  APPROVED
+  RECEIVED
+  CANCELLED
+}
+
+model Inventory {
+  id           String      @id @default(cuid())
+  product      Product     @relation(fields: [productId], references: [id])
+  productId    String
+  quantity     Int
+  status       InventoryStatus
+  branch       Branch?     @relation(fields: [branchId], references: [id])
+  branchId     String?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+enum InventoryStatus {
+  AVAILABLE
+  RESERVED
+  SOLD
+  DISPATCHED
+  DELIVERED
+  DAMAGED
+  RETURNED
+  REWARD_ALLOCATION
+}
+
+model Expense {
+  id           String      @id @default(cuid())
+  description  String
+  amount       Int
+  category     String
+  status       ExpenseStatus @default(PENDING)
+  createdBy    Employee?   @relation("ExpenseCreatedBy", fields: [createdById], references: [id])
+  createdById  String?
+  approvedBy   Employee?   @relation("ExpenseApprovedBy", fields: [approvedById], references: [id])
+  approvedById String?
+  approvedAt   DateTime?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+enum ExpenseStatus {
+  PENDING
+  APPROVED
+  PAID
+  REJECTED
+}
+
+model Salary {
+  id           String      @id @default(cuid())
+  employee     Employee    @relation(fields: [employeeId], references: [id])
+  employeeId   String
+  month        String
+  amount       Int
+  status       SalaryStatus @default(PENDING)
+  paidAt       DateTime?
+  createdAt    DateTime    @default(now())
+}
+
+enum SalaryStatus {
+  PENDING
+  PAID
+  WITHHELD
+}
+
+model Commission {
+  id           String    @id @default(cuid())
+  employee     Employee  @relation(fields: [employeeId], references: [id])
+  employeeId   String
+  amount       Int
+  description  String
+  paidAt       DateTime?
+  createdAt    DateTime    @default(now())
+}
+
+model Report {
+  id           String      @id @default(cuid())
+  name         String
+  type         String
+  filters      Json
+  generatedAt  DateTime    @default(now())
+  generatedBy  Employee?   @relation(fields: [generatedById], references: [id])
+  generatedById String?
+}
+
+model Approval {
+  id            String          @id @default(cuid())
+  entityType    String
+  entityId      String
+  status        ApprovalStatus @default(PENDING)
+  requestedBy   Employee?       @relation("ApprovalRequestedBy", fields: [requestedById], references: [id])
+  requestedById String?
+  approvedBy    Employee?       @relation("ApprovalApprovedBy", fields: [approvedById], references: [id])
+  approvedById  String?
+  campaign      RewardCampaign? @relation("CampaignApprovals", fields: [campaignId], references: [id])
+  campaignId    String?
+  reason        String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model AuditLog {
+  id                  String          @id @default(cuid())
+  user                User?           @relation("userAuditLogs", fields: [userId], references: [id])
+  userId              String?
+  campaign            RewardCampaign? @relation("campaignAuditLogs", fields: [campaignId], references: [id])
+  campaignId          String?
+  rewardAllocation    RewardAllocation? @relation("rewardAllocationAuditLogs", fields: [rewardAllocationId], references: [id])
+  rewardAllocationId  String?
+  entityType          String
+  entityId            String
+  action              String
+  oldValue            Json?
+  newValue            Json?
+  reason              String?
+  ipAddress           String?
+  userAgent           String?
+  createdAt           DateTime        @default(now())
+}
+
+model Session {
+  id           String     @id @default(cuid())
+  user         User       @relation(fields: [userId], references: [id])
+  userId       String
+  token        String     @unique
+  expiresAt    DateTime
+  createdAt    DateTime   @default(now())
+}
+
+model Settings {
+  id           String     @id @default(cuid())
+  key          String     @unique
+  value        Json
+  description  String?
+  updatedAt    DateTime   @updatedAt
+}
+
+model Membership {
+  id               String         @id @default(cuid())
+  membershipId     String         @unique
+  customer         Customer       @relation(fields: [customerId], references: [id])
+  customerId       String         @unique
+  plan             MembershipPlan @relation(fields: [planId], references: [id])
+  planId           String
+  product          Product        @relation(fields: [productId], references: [id])
+  productId        String
+  startDate        DateTime
+  endDate          DateTime
+  installments     Int
+  monthlyAmount    Int
+  totalAmount      Int
+  paidAmount       Int             @default(0)
+  remainingAmount  Int             @default(0)
+  status           MembershipStatus @default(ACTIVE)
+  orders           Order[]         @relation("OrderMembership")
+  emiSchedules     EmiSchedule[]
+  rewardEligibility Json?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+}
+
+enum MembershipStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+  SETTLED
+}
