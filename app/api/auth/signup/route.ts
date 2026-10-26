@@ -16,10 +16,12 @@ export async function POST(request: NextRequest) {
   }
 
   const passwordHash = await hashPassword(password)
+  const timestamp = Date.now()
 
   const customer = await prisma.customer.create({
     data: {
-      customerId: `CUST-${Date.now()}`,
+      customerId: `CUST-${timestamp}`,
+      membershipId: `MEM-${timestamp}`,
       firstName,
       lastName,
       email,
