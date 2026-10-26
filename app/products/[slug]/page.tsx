@@ -1,5 +1,13 @@
 import Link from 'next/link'
 
+export function generateStaticParams() {
+  return [
+    { slug: 'TV-001' },
+    { slug: 'PHONE-002' },
+    { slug: 'FRIDGE-003' }
+  ]
+}
+
 export default function ProductDetailPage({ params }: { params: { slug: string } }) {
   const product = {
     sku: 'TV-001',
