@@ -1,57 +1,73 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { ShieldCheck, CheckCircle2, Lock, ArrowUpRight } from 'lucide-react'
 
 export default function Footer() {
   return (
-    <footer className="border-t border-brand-gold/20 bg-brand-maroon/5 text-slate-700">
-      <div className="mx-auto grid max-w-7xl gap-8 px-6 py-12 lg:px-8 lg:grid-cols-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-brand-maroon text-white font-serif font-bold text-sm">
-              L
+    <footer className="border-t border-white/10 bg-[#070A12] text-slate-400">
+      <div className="mx-auto grid max-w-7xl gap-10 px-6 py-14 lg:px-8 lg:grid-cols-4">
+        {/* Brand Column */}
+        <div className="space-y-4">
+          <Link to="/" className="flex items-center gap-3">
+            <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-emerald-400 p-[1px] shadow-lg shadow-indigo-500/20">
+              <div className="flex h-full w-full items-center justify-center rounded-[11px] bg-[#0B0F19]">
+                <div className="h-4 w-4 rotate-45 border-2 border-indigo-400 bg-emerald-400/20" />
+              </div>
             </div>
-            <p className="text-lg font-serif font-bold text-navy">Lakshmi Club</p>
-          </div>
-          <p className="mt-3 text-xs leading-6 text-slate-600">
-            India's trusted membership savings platform for acquiring genuine branded electronics, appliances, and BIS hallmarked gold through disciplined, transparent monthly installments.
+            <div>
+              <span className="text-lg font-bold tracking-tight text-white">
+                Save<span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-emerald-400">N</span>Buy
+              </span>
+              <span className="block text-[10px] font-medium tracking-widest text-slate-500 uppercase">FinTech Platform</span>
+            </div>
+          </Link>
+          <p className="text-xs leading-relaxed text-slate-400">
+            India's next-generation membership-based durable finance and milestone savings platform. Acquire guaranteed authentic electronics and gold with transparent 0% interest tenures.
           </p>
-          <div className="mt-4 flex gap-2 text-xs text-brand-maroon font-semibold">
-            <span>✓ 100% Genuine</span> · <span>✓ 0% Interest</span> · <span>✓ Audited</span>
+          <div className="flex flex-wrap items-center gap-3 text-[11px] text-emerald-400">
+            <span className="flex items-center gap-1"><ShieldCheck className="h-3.5 w-3.5" /> 100% Authentic</span>
+            <span className="flex items-center gap-1"><CheckCircle2 className="h-3.5 w-3.5" /> 0% Markup</span>
+            <span className="flex items-center gap-1"><Lock className="h-3.5 w-3.5" /> Escrow Backed</span>
           </div>
         </div>
+
+        {/* Company Links */}
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.25em] text-brand-maroon">Company</p>
-          <nav className="mt-4 flex flex-col space-y-2.5 text-xs text-slate-600">
-            <Link to="/about" className="hover:text-brand-maroon transition">About Lakshmi Club</Link>
-            <Link to="/plans" className="hover:text-brand-maroon transition">Membership Plans</Link>
-            <Link to="/products" className="hover:text-brand-maroon transition">Brand Catalog</Link>
-            <Link to="/careers" className="hover:text-brand-maroon transition">Careers</Link>
-            <Link to="/privacy" className="hover:text-brand-maroon transition">Privacy Policy</Link>
-            <Link to="/terms" className="hover:text-brand-maroon transition">Terms &amp; Conditions</Link>
+          <p className="text-xs font-bold uppercase tracking-widest text-white">Platform</p>
+          <nav className="mt-4 flex flex-col space-y-2.5 text-xs text-slate-400">
+            <Link to="/about" className="hover:text-indigo-400 transition">About Architecture</Link>
+            <Link to="/plans" className="hover:text-indigo-400 transition">Membership Matrix</Link>
+            <Link to="/products" className="hover:text-indigo-400 transition">Verified Brand Store</Link>
+            <Link to="/partners" className="hover:text-indigo-400 transition">Authorized Retail Network</Link>
+            <Link to="/careers" className="hover:text-indigo-400 transition">Engineering Careers</Link>
           </nav>
         </div>
+
+        {/* Support & Governance */}
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.25em] text-brand-maroon">Support &amp; Partners</p>
-          <nav className="mt-4 flex flex-col space-y-2.5 text-xs text-slate-600">
-            <Link to="/support" className="hover:text-brand-maroon transition">Customer Support</Link>
-            <Link to="/faq" className="hover:text-brand-maroon transition">Frequently Asked Questions</Link>
-            <Link to="/partners" className="hover:text-brand-maroon transition">Authorized Retail Partners</Link>
-            <Link to="/reward" className="hover:text-brand-maroon transition">Rewards &amp; Milestones</Link>
-            <Link to="/offers" className="hover:text-brand-maroon transition">Exclusive Offers</Link>
-            <Link to="/contact" className="hover:text-brand-maroon transition">Contact Head Office</Link>
+          <p className="text-xs font-bold uppercase tracking-widest text-white">Governance &amp; Trust</p>
+          <nav className="mt-4 flex flex-col space-y-2.5 text-xs text-slate-400">
+            <Link to="/support" className="hover:text-indigo-400 transition">Member Concierge</Link>
+            <Link to="/faq" className="hover:text-indigo-400 transition">Frequently Asked Questions</Link>
+            <Link to="/reward" className="hover:text-indigo-400 transition">Milestone Rewards Program</Link>
+            <Link to="/privacy" className="hover:text-indigo-400 transition">Privacy &amp; Data Security</Link>
+            <Link to="/terms" className="hover:text-indigo-400 transition">Terms &amp; Settlement Protocols</Link>
           </nav>
         </div>
+
+        {/* Contact / Head Office */}
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.25em] text-brand-maroon">Customer Care</p>
-          <p className="mt-4 text-xs text-slate-600">support@lakshmiclub.com</p>
-          <p className="mt-1 text-xs text-slate-600 font-semibold">+91 22 1234 5678 / 1800-200-LAKSHMI</p>
-          <p className="mt-4 text-xs text-slate-600">
-            Heritage Tower, Nariman Point, Mumbai, Maharashtra - 400021
+          <p className="text-xs font-bold uppercase tracking-widest text-white">Institutional Desk</p>
+          <p className="mt-4 text-xs text-slate-300">concierge@savenbuy.in</p>
+          <p className="mt-1 text-xs text-slate-300 font-semibold">+91 22 4920 8800 / 1800-419-SAVENBUY</p>
+          <p className="mt-3 text-xs leading-5 text-slate-500">
+            One World Center, Tower 2, Floor 14, Senapati Bapat Marg, Lower Parel, Mumbai 400013
           </p>
         </div>
       </div>
-      <div className="border-t border-brand-gold/15 bg-white/95 py-4 text-center text-xs text-slate-500">
-        © 2026 Lakshmi Membership Platform. All brand names (Apple, Samsung, Sony, LG, Daikin, Dyson, Tanishq) are trademarks of their respective owners.
+
+      <div className="border-t border-white/5 bg-[#05070D] py-4 text-center text-xs text-slate-500">
+        © 2026 SaveNBuy Financial Technologies Inc. All brand trademarks (Apple, Samsung, Sony, LG, Daikin, Dyson, Tanishq) belong to their respective corporations.
       </div>
     </footer>
   )

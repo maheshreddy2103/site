@@ -1,10 +1,11 @@
 import React from 'react'
+import { Building2, ShieldCheck, CheckCircle2, Sparkles, MapPin } from 'lucide-react'
 
 export default function Partners() {
   const partners = [
     {
       name: 'Croma (A Tata Enterprise)',
-      type: 'Electronics & Appliances Partner',
+      type: 'Electronics & Appliances Network',
       city: 'Pan-India (400+ Megastores)',
       features: 'Full Apple Authorized Reseller, Sony Bravia Experience Zones, On-site Installation.'
     },
@@ -41,18 +42,19 @@ export default function Partners() {
   ]
 
   return (
-    <div className="min-h-screen bg-cream text-navy py-16">
+    <div className="min-h-screen bg-[#0B0F19] text-slate-100 py-16 radial-mesh">
       <div className="mx-auto max-w-6xl px-6 lg:px-8">
-        <div className="rounded-[2.5rem] border border-brand-gold/20 bg-white p-10 shadow-lg">
+        <div className="rounded-3xl border border-white/10 bg-[#131B2E]/80 p-8 sm:p-12 shadow-2xl backdrop-blur-xl">
           <div className="max-w-2xl">
-            <p className="text-xs font-bold uppercase tracking-[0.3em] text-brand-maroon">
-              Authorized Partner Network
-            </p>
-            <h1 className="mt-3 text-4xl font-serif font-bold text-navy">
+            <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1 text-xs font-semibold tracking-wider text-indigo-400 mb-3">
+              <Building2 className="h-3.5 w-3.5 text-indigo-400" />
+              <span>Authorized Distribution Network</span>
+            </div>
+            <h1 className="text-3xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-indigo-300">
               Trusted Retail Partners Across India
             </h1>
-            <p className="mt-4 text-sm leading-relaxed text-slate-600">
-              Lakshmi Club collaborates directly with India’s largest authorized retail chains and official brand outlets. Every product you earn or acquire through your membership is 100% original, sealed, and backed by full manufacturer warranty.
+            <p className="mt-4 text-xs sm:text-sm leading-relaxed text-slate-300">
+              SaveNBuy collaborates directly with India's most respected retail chains and authorized corporate brand distributors. Every asset acquired is 100% original, brand-sealed, and registered with official manufacturer warranties.
             </p>
           </div>
 
@@ -60,26 +62,30 @@ export default function Partners() {
             {partners.map((partner) => (
               <div
                 key={partner.name}
-                className="rounded-3xl border border-brand-gold/15 bg-brand-cream/60 p-6 shadow-sm hover:shadow-md transition"
+                className="rounded-2xl border border-white/10 bg-[#0B0F19]/60 p-6 backdrop-blur-md hover:border-indigo-500/40 transition-all duration-200"
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <h2 className="text-lg font-bold text-navy">{partner.name}</h2>
-                    <p className="text-xs font-semibold text-brand-maroon mt-1">{partner.type}</p>
+                    <h2 className="text-base font-bold text-white">{partner.name}</h2>
+                    <p className="text-xs font-medium text-indigo-400 mt-1">{partner.type}</p>
                   </div>
-                  <span className="rounded-full bg-brand-maroon/10 px-3 py-1 text-[11px] font-bold text-brand-maroon">
-                    Verified
+                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-bold text-emerald-400 border border-emerald-500/30">
+                    <ShieldCheck className="h-3 w-3" />
+                    <span>Verified</span>
                   </span>
                 </div>
-                <p className="mt-3 text-xs font-medium text-slate-700">📍 {partner.city}</p>
-                <p className="mt-2 text-xs leading-5 text-slate-600">{partner.features}</p>
+                <p className="mt-3 text-xs text-slate-400 flex items-center gap-1.5">
+                  <MapPin className="h-3.5 w-3.5 text-slate-500" />
+                  <span>{partner.city}</span>
+                </p>
+                <p className="mt-2 text-xs leading-relaxed text-slate-300">{partner.features}</p>
               </div>
             ))}
           </div>
 
-          <div className="mt-12 rounded-3xl bg-brand-maroon/5 p-6 border border-brand-gold/20 text-xs text-slate-600">
-            <p className="font-semibold text-navy text-sm mb-1">Store Pickup Option:</p>
-            Members can choose either complimentary insured doorstep delivery or personally collect their brand-sealed product directly from their nearest authorized partner store (Croma, Reliance Digital, or Tanishq) upon membership completion.
+          <div className="mt-10 rounded-2xl bg-[#0B0F19]/80 p-5 border border-white/10 text-xs text-slate-300">
+            <p className="font-semibold text-white mb-1">Flexible Fulfillment Guarantee:</p>
+            Members can select either complimentary insured doorstep delivery or personally collect their brand-sealed asset directly from their nearest authorized partner store (Croma, Reliance Digital, or Tanishq) immediately upon plan milestone completion.
           </div>
         </div>
       </div>
