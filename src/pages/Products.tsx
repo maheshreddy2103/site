@@ -14,10 +14,33 @@ import {
 } from 'lucide-react'
 import { productsData, Product } from '../data/products'
 
-const categories = ['All', 'Smartphones', 'Smart TVs', 'Home Appliances', 'Laptops', 'Gold & Jewellery']
+const categories = [
+  'All',
+  'Refrigerators',
+  'Air Conditioners',
+  'Washing Machines',
+  'Televisions',
+  'Kitchen Appliances',
+  'Water Purifiers',
+  'Smartphones',
+  'Laptops'
+]
 
 export default function Products() {
-  const [selectedCategory, setSelectedCategory] = useState('All')
+  const [selectedCategory, setSelectedCategory] = useState(() => {
+    try {
+      const hash = window.location.hash
+      const queryIdx = hash.indexOf('?')
+      if (queryIdx !== -1) {
+        const params = new URLSearchParams(hash.slice(queryIdx))
+        return params.get('category') || 'All'
+      }
+      const params = new URLSearchParams(window.location.search)
+      return params.get('category') || 'All'
+    } catch (e) {
+      return 'All'
+    }
+  })
   const [searchQuery, setSearchQuery] = useState('')
   const [sortBy, setSortBy] = useState<'popular' | 'price-low' | 'price-high'>('popular')
 
@@ -44,15 +67,15 @@ export default function Products() {
         
         {/* Header Section */}
         <div className="text-center max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 text-xs font-semibold tracking-wider text-emerald-400 backdrop-blur-md mb-4 shadow-[0_0_15px_rgba(16,185,129,0.15)]">
-            <Sparkles className="h-3.5 w-3.5 text-emerald-400" />
-            <span>Authorized Genuine Brand Catalog</span>
+          <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-1.5 text-xs font-semibold tracking-wider text-amber-300 backdrop-blur-md mb-4 shadow-[0_0_15px_rgba(245,158,11,0.15)]">
+            <Sparkles className="h-3.5 w-3.5 text-amber-400" />
+            <span>Built Around What Indian Homes Save For</span>
           </div>
-          <h1 className="text-4xl font-extrabold sm:text-5xl text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-indigo-300 tracking-tight">
-            Flagship Hardware &amp; Sovereign Assets
+          <h1 className="text-4xl font-extrabold sm:text-5xl text-white tracking-tight">
+            Curated Home Appliances Catalogue
           </h1>
-          <p className="mt-4 text-base text-slate-400 leading-relaxed">
-            Acquire guaranteed original electronics, flagship smartphones, AI appliances, and BIS hallmarked gold with transparent 0% interest milestone installment plans.
+          <p className="mt-4 text-base text-slate-300 leading-relaxed">
+            Pick any appliance whenever you need it. Your savings fund pays first, and the remaining balance is split into transparent 0% interest no-cost EMIs.
           </p>
         </div>
 

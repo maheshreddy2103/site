@@ -22,6 +22,7 @@ import Offers from './pages/Offers'
 import Partners from './pages/Partners'
 import Reward from './pages/Reward'
 import Orders from './pages/Orders'
+import BuyNowCalculator from './components/BuyNowCalculator'
 
 // Customer Pages
 import CustomerDashboard from './pages/CustomerDashboard'
@@ -50,6 +51,7 @@ export default function App() {
               {/* Public Routes */}
               <Route path="/" element={<Home />} />
               <Route path="/plans" element={<Plans />} />
+              <Route path="/calculator" element={<div className="min-h-screen bg-[#0B0F19] py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto"><BuyNowCalculator /></div>} />
               <Route path="/products" element={<Products />} />
               <Route path="/products/:slug" element={<ProductDetail />} />
               <Route path="/login" element={<Login />} />

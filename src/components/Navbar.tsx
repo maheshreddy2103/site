@@ -26,10 +26,10 @@ export default function Navbar() {
 
   const navLinks = [
     { name: 'Home', path: '/' },
-    { name: 'Plans', path: '/plans' },
-    { name: 'Products', path: '/products', badge: '100% Genuine' },
-    { name: 'Rewards', path: '/reward' },
-    { name: 'Partners', path: '/partners' },
+    { name: 'Auto-Save', path: '/plans', badge: '₹50/day' },
+    { name: 'Appliances', path: '/products', badge: '0% EMI' },
+    { name: 'Calculator', path: '/calculator' },
+    { name: 'Track Orders', path: '/orders' },
     { name: 'Support', path: '/support' }
   ]
 

@@ -1,412 +1,617 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { productsData } from '../data/products'
+import BuyNowCalculator from '../components/BuyNowCalculator'
 import {
   ShieldCheck,
   Zap,
-  TrendingUp,
-  Award,
   CheckCircle2,
   Sparkles,
   ArrowRight,
   Clock,
   Lock,
-  Layers,
-  ChevronRight,
-  CreditCard,
   Percent,
   Truck,
-  Flame
+  Flame,
+  Smartphone,
+  Globe,
+  LayoutDashboard,
+  Database,
+  Layers,
+  Check,
+  Bell,
+  RefreshCw,
+  Search,
+  ExternalLink,
+  Wallet
 } from 'lucide-react'
 
 export default function Home() {
-  const featuredProducts = productsData.slice(0, 4)
+  const featuredAppliances = productsData.slice(0, 4)
 
-  const valueProps = [
+  const applianceCategories = [
+    { name: 'Refrigerators', icon: '❄️', count: '14 Models', slug: 'Refrigerators' },
+    { name: 'Air Conditioners', icon: '💨', count: '18 Models', slug: 'Air Conditioners' },
+    { name: 'Washing Machines', icon: '🧺', count: '12 Models', slug: 'Washing Machines' },
+    { name: 'Televisions', icon: '📺', count: '16 Models', slug: 'Televisions' },
+    { name: 'Kitchen Appliances', icon: '🍳', count: '24 Models', slug: 'Kitchen Appliances' },
+    { name: 'Water Purifiers', icon: '💧', count: '8 Models', slug: 'Water Purifiers' }
+  ]
+
+  const fiveStepFlow = [
     {
-      icon: <Percent className="w-5 h-5 text-emerald-400" />,
-      badge: '0% Interest Dues',
-      title: 'Zero Compounding Debt',
-      description: 'Predictable fixed monthly savings. No balloon fees, no credit card interest traps, and full regulatory transparency.'
+      num: '01',
+      title: 'Set up auto-save',
+      desc: 'Pick a daily, weekly or monthly amount. UPI AutoPay collects it automatically.'
     },
     {
-      icon: <Award className="w-5 h-5 text-indigo-400" />,
-      badge: '100% Genuine Brands',
-      title: 'Authorized Retail Seal',
-      description: 'Fulfilled directly via Croma, Reliance Digital, and Tanishq with original tax invoice and pan-India warranty.'
+      num: '02',
+      title: 'Build the fund',
+      desc: 'Every debit adds to your own savings fund, visible in real time with full history.'
     },
     {
-      icon: <ShieldCheck className="w-5 h-5 text-cyan-400" />,
-      badge: 'Audited Escrow Custody',
-      title: 'Bank-Grade Milestone Security',
-      description: 'Every monthly installment is tracked on an audit-ready ledger with automated milestone rewards and flexible settlements.'
+      num: '03',
+      title: 'Shop anytime',
+      desc: 'Browse the catalogue and pick an appliance — no need to wait until the full price is saved.'
+    },
+    {
+      num: '04',
+      title: 'Pay the rest at 0%',
+      desc: 'The fund is applied first; the remaining balance is split into no-cost EMIs.'
+    },
+    {
+      num: '05',
+      title: 'Receive at home',
+      desc: 'The appliance is delivered to your doorstep; EMIs are auto-debited on schedule.'
     }
   ]
 
-  const pricingTiers = [
+  const corePillars = [
     {
-      name: 'Essential Smart Plan',
-      tier: 'Tier 01',
-      monthly: '₹3,000',
-      tenure: '9 Months Tenure',
-      totalVal: '₹27,000 Total Capital',
-      badge: 'Smart Entry',
-      isPopular: false,
-      target: 'OnePlus 12R, LG 43" 4K Smart TVs, Audio Systems',
-      features: [
-        '9-Month disciplined tenure structure',
-        '0% Interest dues with zero processing charges',
-        '500 Milestone Loyalty Points upon completion',
-        'Croma & Vijay Sales partner fulfillment warranty',
-        'Instant digital account statement on portal'
-      ]
+      badge: 'Habit, not effort',
+      title: 'Automatic Micro-Debits',
+      desc: 'Automatic small debits remove the need for willpower. Customers save without having to remember to.',
+      icon: <Zap className="h-5 w-5 text-amber-400" />
     },
     {
-      name: 'Prime Flagship Club',
-      tier: 'Tier 02 · Recommended',
-      monthly: '₹5,000',
-      tenure: '12 Months Tenure',
-      totalVal: '₹60,000 Total Capital',
-      badge: 'Most Popular',
-      isPopular: true,
-      target: 'Sony Bravia 55" 4K, Samsung S24, LG AI Washer, Daikin AC',
-      features: [
-        '12-Month balanced milestone savings schedule',
-        'Guaranteed zero hidden charges & interest waiver',
-        '1,250 Milestone Reward Credits + accessories voucher',
-        'Free VIP home delivery & verified brand installation',
-        'Priority concierge support & warranty registration'
-      ]
+      badge: 'Buy now, not someday',
+      title: 'Zero Waiting Period',
+      desc: 'Customers don’t have to wait until the full price is saved — whatever is in the fund makes the purchase affordable today.',
+      icon: <Sparkles className="h-5 w-5 text-indigo-400" />
     },
     {
-      name: 'Sovereign Bullion & Tech',
-      tier: 'Tier 03',
-      monthly: '₹7,500',
-      tenure: '12 to 18 Months Tenure',
-      totalVal: '₹90,000 to ₹1,35,000',
-      badge: 'High Value',
-      isPopular: false,
-      target: 'Apple iPhone 16 Pro, MacBook Air M2, Tanishq 24K Gold Coin',
-      features: [
-        '12 to 18-Month flexible high-ticket savings path',
-        'Tanishq 24K (999.9) Tamper-Proof CertiCard Gold',
-        '2,500 Exclusive Milestone Tier Credits',
-        'Dedicated Personal Relationship Wealth Concierge',
-        '100% Guaranteed buyback and liquidity options'
-      ]
+      badge: 'Zero interest, zero surprises',
+      title: 'Pure 0% No-Cost EMI',
+      desc: 'Clear EMI schedules with no interest, a transparent double-entry fund ledger and instant statements build lasting trust.',
+      icon: <ShieldCheck className="h-5 w-5 text-emerald-400" />
+    }
+  ]
+
+  const threeExperiences = [
+    {
+      id: '01',
+      title: 'Customer Web Portal',
+      lineItem: 'Line Item 2 · Web Platform',
+      icon: <Globe className="h-6 w-6 text-indigo-400" />,
+      desc: 'Responsive web — the full savings journey in any browser: auto-save mandates, live double-entry ledger, appliance catalogue, and instant 0% EMI checkout.',
+      features: ['Full desktop & mobile browser journey', 'Interactive Buy-Now Calculator', 'Self-service KYC & mandate pause/resume', 'Downloadable tax invoices & ledger statements']
+    },
+    {
+      id: '02',
+      title: 'Admin & Operations Console',
+      lineItem: 'Line Item 2 · Management Desk',
+      icon: <LayoutDashboard className="h-6 w-6 text-emerald-400" />,
+      desc: 'Your team’s control room — customers, collections, appliance catalogue, partner fulfillment, and comprehensive financial reconciliation.',
+      features: ['Real-time collections & mandate tracking', 'Double-entry ledger audit trail', 'Catalogue & retail partner inventory control', 'Maker-checker approval workflows']
+    },
+    {
+      id: '03',
+      title: 'Customer Mobile App',
+      lineItem: 'Line Item 1 · Android & iOS',
+      icon: <Smartphone className="h-6 w-6 text-amber-400" />,
+      desc: 'A polished, fast, and trustworthy app — the everyday touchpoint built for Indian households on entry-level smartphones & patchy networks.',
+      features: ['Mobile-number OTP & biometric login', '1-tap UPI AutoPay pause & modify', 'Instant push alerts for daily debits', 'Offline-resilient state caching']
+    }
+  ]
+
+  const securityPillars = [
+    {
+      title: 'Double-Entry Ledger',
+      desc: 'Every rupee in and out is recorded as balanced entries, so any balance can be rebuilt and audited at any time.',
+      icon: <Database className="h-4 w-4 text-emerald-400" />
+    },
+    {
+      title: 'Encryption Everywhere',
+      desc: 'TLS in transit and encryption at rest; sensitive identifiers are masked or tokenised. Card data never touches our servers.',
+      icon: <Lock className="h-4 w-4 text-indigo-400" />
+    },
+    {
+      title: 'Maker-Checker Controls',
+      desc: 'Withdrawals, refunds and manual adjustments need a second approver before they take effect.',
+      icon: <ShieldCheck className="h-4 w-4 text-teal-400" />
+    },
+    {
+      title: 'Idempotent Payments',
+      desc: 'Duplicate-safe payment webhooks and automated daily reconciliation against gateway settlements.',
+      icon: <RefreshCw className="h-4 w-4 text-cyan-400" />
+    },
+    {
+      title: 'Security-Tested',
+      desc: 'OWASP-aligned vulnerability testing and penetration audit completed prior to production go-live.',
+      icon: <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+    },
+    {
+      title: 'Full Audit Trail',
+      desc: 'Role-based access for every team member, with every admin action logged and time-stamped.',
+      icon: <Clock className="h-4 w-4 text-amber-400" />
     }
   ]
 
   return (
-    <div className="min-h-screen bg-[#0B0F19] text-slate-100 radial-mesh">
+    <div className="bg-[#0B0F19] text-slate-100 min-h-screen selection:bg-indigo-500 selection:text-white">
       
-      {/* Hero Section */}
-      <section className="relative overflow-hidden pt-12 pb-20 sm:pt-20 sm:pb-28">
+      {/* 1. HERO SECTION ("Save a little. Bring home a lot.") */}
+      <section className="relative overflow-hidden pt-10 pb-20 lg:pt-16 lg:pb-28 border-b border-white/10">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-indigo-600/15 via-emerald-500/5 to-transparent blur-3xl pointer-events-none" />
+
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-[1.25fr_0.95fr] lg:items-center">
+          <div className="grid lg:grid-cols-12 gap-12 items-center">
             
-            {/* Left Column: Headline & Value Narrative */}
-            <div>
-              {/* Dynamic Live Tag */}
-              <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3.5 py-1.5 text-xs font-mono font-medium text-indigo-300 backdrop-blur-md shadow-sm mb-6">
-                <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="tracking-wide">NEXT-GEN FINTECH SAVINGS // 0% INTEREST</span>
+            {/* Left Column: Core Value Proposition */}
+            <div className="lg:col-span-7 space-y-6 text-left">
+              <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1.5 text-[11px] font-bold tracking-wider uppercase text-indigo-300">
+                <span>MOBILE APPLICATION + WEB APPLICATION PLATFORM</span>
               </div>
 
-              {/* Main Headline with White-to-Indigo Gradient */}
-              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-sans font-extrabold tracking-tight leading-[1.08] text-white">
-                Build Today. <br />
-                <span className="bg-gradient-to-r from-white via-indigo-200 to-indigo-400 bg-clip-text text-transparent">
-                  Own Tomorrow.
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.08]">
+                Save a little.<br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500">
+                  Bring home a lot.
                 </span>
               </h1>
 
-              <p className="mt-6 max-w-xl text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
-                A disciplined savings and milestone finance platform engineered for aspirational living. Acquire genuine flagship electronics, smart appliances, and hallmarked gold with zero compounding debt.
+              <p className="text-base sm:text-lg text-slate-300 max-w-2xl leading-relaxed">
+                An auto-savings platform where customers build a fund through small automatic debits — and can buy home appliances anytime, using their savings, with the balance on no-cost EMI.
               </p>
 
-              {/* CTAs */}
-              <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-                <Link
-                  to="/products"
-                  className="group inline-flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-indigo-500 via-indigo-600 to-indigo-700 px-7 py-3.5 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-indigo-500/30 transition-all duration-300 hover:scale-[1.02] hover:shadow-indigo-500/50"
-                >
-                  <Sparkles className="w-4 h-4 text-emerald-300" />
-                  <span>Explore Brand Catalog</span>
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                </Link>
-
-                <Link
-                  to="/plans"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.04] px-7 py-3.5 text-xs font-bold uppercase tracking-wider text-slate-200 backdrop-blur-md transition-all hover:bg-white/[0.08] hover:border-indigo-400/50 hover:text-white"
-                >
-                  <span>Compare Milestone Plans</span>
-                </Link>
-              </div>
-
-              {/* Thin-line Metrics / Trust Strip */}
-              <div className="mt-12 grid grid-cols-3 gap-4 border-t border-white/10 pt-8 max-w-lg">
-                <div>
-                  <div className="text-2xl sm:text-3xl font-extrabold text-white font-mono">0%</div>
-                  <div className="mt-1 text-xs text-slate-400 font-medium">Interest &amp; Fees</div>
-                </div>
-                <div className="border-l border-white/10 pl-4">
-                  <div className="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-mono">100%</div>
-                  <div className="mt-1 text-xs text-slate-400 font-medium">Genuine Brand Seal</div>
-                </div>
-                <div className="border-l border-white/10 pl-4">
-                  <div className="text-2xl sm:text-3xl font-extrabold text-indigo-400 font-mono">₹4.8 Cr+</div>
-                  <div className="mt-1 text-xs text-slate-400 font-medium">Delivered to Date</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column: Interactive Glassmorphic Value Proposition Cards */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between px-1 mb-2">
-                <span className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-400">
-                  // PLATFORM ADVANTAGES
-                </span>
-                <span className="flex items-center gap-1.5 text-xs font-semibold text-emerald-400">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  Audited Escrow Operations
-                </span>
-              </div>
-
-              {valueProps.map((item, idx) => (
-                <div
-                  key={idx}
-                  className="group relative rounded-2xl border border-white/10 bg-[#131B2E]/70 p-6 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1.5 hover:border-indigo-500/40 hover:shadow-glow-indigo cursor-pointer"
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#1E293B] border border-white/10 text-white shadow-inner group-hover:border-indigo-500/40 group-hover:scale-105 transition-all">
-                      {item.icon}
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between">
-                        <span className="rounded-full bg-white/5 px-2.5 py-0.5 text-[10px] font-mono font-bold uppercase tracking-wider text-slate-300 border border-white/10 group-hover:border-indigo-500/30 group-hover:text-indigo-300 transition-colors">
-                          {item.badge}
-                        </span>
-                        <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-indigo-400 group-hover:translate-x-1 transition-all" />
-                      </div>
-                      <h3 className="mt-2 text-base font-bold text-white group-hover:text-indigo-100 transition">
-                        {item.title}
-                      </h3>
-                      <p className="mt-1.5 text-xs text-slate-400 leading-relaxed">
-                        {item.description}
-                      </p>
+              {/* Proposal Metadata Callout */}
+              <div className="rounded-2xl border border-white/10 bg-[#131B2E]/60 p-4 backdrop-blur-md max-w-xl">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
+                  <div>
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block">Prepared For</span>
+                    <span className="font-extrabold text-white text-sm">Mr. Naveen</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block">Engagement</span>
+                    <span className="font-bold text-indigo-300 text-xs">Mobile App + Web App</span>
+                  </div>
+                  <div className="col-span-2 sm:col-span-1">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block">Channels</span>
+                    <div className="flex gap-1.5 mt-0.5">
+                      <span className="rounded bg-white/10 px-1.5 py-0.5 text-[10px] font-semibold text-slate-200">Android</span>
+                      <span className="rounded bg-white/10 px-1.5 py-0.5 text-[10px] font-semibold text-slate-200">iOS</span>
+                      <span className="rounded bg-emerald-500/20 px-1.5 py-0.5 text-[10px] font-bold text-emerald-400">Web</span>
                     </div>
                   </div>
                 </div>
-              ))}
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap items-center gap-4 pt-2">
+                <Link
+                  to="/signup"
+                  className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 px-6 py-4 text-xs font-bold uppercase tracking-wider text-black shadow-lg shadow-orange-500/25 hover:from-amber-400 hover:to-orange-400 transition transform hover:scale-[1.02]"
+                >
+                  <Sparkles className="h-4 w-4 text-black" />
+                  <span>Start Auto-Save (₹50/Day)</span>
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+
+                <Link
+                  to="/products"
+                  className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-[#131B2E] px-6 py-4 text-xs font-bold uppercase tracking-wider text-white hover:bg-white/10 transition"
+                >
+                  <span>Browse Appliances</span>
+                  <ArrowRight className="h-4 w-4 text-slate-400" />
+                </Link>
+              </div>
+
+              {/* Trust Indicators */}
+              <div className="flex flex-wrap items-center gap-6 pt-3 text-xs text-slate-400">
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-400" /> UPI AutoPay Mandate
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-400" /> Balance on 0% EMI (No Interest)
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-400" /> Withdraw / Pause Anytime
+                </span>
+              </div>
+            </div>
+
+            {/* Right Column: Concept Phone Mockup Screen (Matches Image 1 exactly) */}
+            <div className="lg:col-span-5 flex justify-center">
+              <div className="relative w-full max-w-sm rounded-[40px] border-[6px] border-slate-700 bg-[#0B0F19] p-4 shadow-2xl shadow-indigo-500/20">
+                {/* Phone Notch */}
+                <div className="mx-auto h-4 w-28 rounded-full bg-slate-800 mb-3 flex items-center justify-center">
+                  <div className="h-2 w-2 rounded-full bg-slate-900 mr-2" />
+                  <div className="h-2 w-10 rounded-full bg-slate-900" />
+                </div>
+
+                {/* In-app Screen Content */}
+                <div className="space-y-4 text-left">
+                  {/* Greeting */}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] text-slate-400 block">Good morning,</span>
+                      <h3 className="text-base font-extrabold text-white">Priya</h3>
+                    </div>
+                    <div className="rounded-full bg-white/5 p-2 text-slate-300 border border-white/10">
+                      <Bell className="h-3.5 w-3.5" />
+                    </div>
+                  </div>
+
+                  {/* Savings Fund Card (Blue Gradient in proposal) */}
+                  <div className="rounded-2xl bg-gradient-to-br from-blue-700 via-indigo-700 to-indigo-900 p-4 text-white shadow-lg space-y-1 relative overflow-hidden">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-200">
+                      MY SAVINGS FUND
+                    </span>
+                    <div className="text-3xl font-extrabold tracking-tight">₹5,000</div>
+                    <div className="flex items-center gap-1 text-[11px] text-indigo-200 pt-1">
+                      <RefreshCw className="h-3 w-3" />
+                      <span>Auto-save ₹50 / day · next 9:00 AM</span>
+                    </div>
+
+                    {/* Auto-save done toast */}
+                    <div className="absolute top-2 right-2 flex items-center gap-1 rounded-full bg-emerald-500/90 text-black px-2 py-0.5 text-[9px] font-bold shadow-md">
+                      <Check className="h-2.5 w-2.5" />
+                      <span>Auto-save done</span>
+                    </div>
+                  </div>
+
+                  {/* Appliance in Focus Card */}
+                  <div className="rounded-2xl border border-white/10 bg-[#131B2E] p-3.5 space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-lg">
+                        ❄️
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <h4 className="text-xs font-bold text-white truncate">Double-Door Refrigerator</h4>
+                        <span className="text-[11px] font-extrabold text-slate-300">Price ₹17,000</span>
+                      </div>
+                    </div>
+
+                    {/* Progress Bar & Split Values */}
+                    <div className="space-y-1.5">
+                      <div className="flex justify-between text-[10px] font-bold">
+                        <span className="text-amber-400">● ₹5,000 from fund</span>
+                        <span className="text-indigo-400">● ₹12,000 on EMI</span>
+                      </div>
+                      <div className="h-2.5 w-full rounded-full bg-slate-800 flex overflow-hidden">
+                        <div className="h-full bg-amber-400 w-[29.4%]" />
+                        <div className="h-full bg-indigo-500 w-[70.6%]" />
+                      </div>
+                    </div>
+
+                    {/* EMI Calculation Tag */}
+                    <div className="flex items-center justify-between pt-1">
+                      <span className="text-xs font-bold text-white">
+                        ₹1,000 <span className="text-[10px] font-normal text-slate-400">/ month × 12</span>
+                      </span>
+                      <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-[10px] font-bold text-emerald-400 border border-emerald-500/30">
+                        0% interest
+                      </span>
+                    </div>
+
+                    {/* Buy Now Button */}
+                    <button
+                      type="button"
+                      className="w-full rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 py-2.5 text-xs font-bold uppercase tracking-wider text-black shadow-md hover:from-orange-400 hover:to-amber-400 transition"
+                    >
+                      Buy now
+                    </button>
+                  </div>
+
+                  {/* Recent Activity */}
+                  <div className="space-y-1.5 text-xs">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                      Recent activity
+                    </span>
+                    <div className="flex items-center justify-between rounded-xl bg-white/[0.03] p-2 border border-white/5">
+                      <div className="flex items-center gap-2">
+                        <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                        <div>
+                          <div className="font-semibold text-white text-[11px]">Auto-save successful</div>
+                          <div className="text-[9px] text-slate-400">Today · UPI AutoPay</div>
+                        </div>
+                      </div>
+                      <span className="font-mono font-bold text-emerald-400 text-xs">+₹50</span>
+                    </div>
+
+                    <div className="flex items-center justify-between rounded-xl bg-white/[0.03] p-2 border border-white/5">
+                      <div className="flex items-center gap-2">
+                        <span className="h-2 w-2 rounded-full bg-indigo-400" />
+                        <div>
+                          <div className="font-semibold text-white text-[11px]">Top-up</div>
+                          <div className="text-[9px] text-slate-400">Yesterday · UPI</div>
+                        </div>
+                      </div>
+                      <span className="font-mono font-bold text-indigo-300 text-xs">+₹500</span>
+                    </div>
+                  </div>
+
+                  {/* Floating Pill: Balance on 0% EMI */}
+                  <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-2 text-center text-[10px] font-bold text-amber-300">
+                    % Balance on 0% EMI · No interest, ever
+                  </div>
+                </div>
+
+                <div className="mt-3 text-center text-[9px] font-mono uppercase tracking-widest text-slate-500">
+                  ILLUSTRATIVE CONCEPT SCREEN
+                </div>
+              </div>
             </div>
 
           </div>
         </div>
       </section>
 
-      {/* Featured Luxury Brands & Products Showcase */}
-      <section className="relative border-t border-white/10 bg-[#0F172A]/40 py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* 2. SECTION 01: THE PRODUCT CONCEPT (Matches Image 4) */}
+      <section id="how-it-works" className="py-20 border-b border-white/10 bg-[#070A12]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
           
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
-            <div>
-              <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-widest text-indigo-400 mb-2">
-                <Flame className="w-3.5 h-3.5 text-indigo-400" />
-                CURATED HARDWARE CATALOG
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3.5 py-1 text-xs font-semibold text-amber-400">
+              <span>01 · THE PRODUCT CONCEPT</span>
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+              Save a little every day.<br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-emerald-400">
+                Buy when you need it — interest-free.
+              </span>
+            </h2>
+            <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
+              An auto-savings platform for Indian households. Customers set up a small automatic debit and a savings fund builds up. Whenever they need an appliance, they buy it from the catalogue — the fund pays first, and any balance becomes a no-cost EMI.
+            </p>
+            <div className="rounded-2xl border border-white/10 bg-[#131B2E]/50 p-4 text-xs text-slate-400 text-left sm:text-center">
+              💡 <span className="text-slate-200 font-semibold">The model is deliberately simple:</span> the fund is the customer’s own money, with no investment returns and no reward points. Its value is saving discipline and interest-free buying.
+            </div>
+          </div>
+
+          {/* 5-Step Visual Horizontal Flow */}
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+            {fiveStepFlow.map((step) => (
+              <div
+                key={step.num}
+                className="relative rounded-2xl border border-white/10 bg-[#131B2E]/80 p-5 shadow-lg flex flex-col justify-between hover:border-indigo-500/50 transition group"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs font-mono font-extrabold text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-lg border border-amber-500/20">
+                      STEP {step.num}
+                    </span>
+                    <span className="h-2 w-2 rounded-full bg-emerald-400 opacity-60 group-hover:opacity-100" />
+                  </div>
+                  <h3 className="text-base font-bold text-white mb-2">{step.title}</h3>
+                  <p className="text-xs text-slate-400 leading-relaxed">{step.desc}</p>
+                </div>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-sans font-bold text-white tracking-tight">
-                Flagship Products from Authorized Partners
+            ))}
+          </div>
+
+          {/* 3 Core Pillars */}
+          <div className="grid gap-6 md:grid-cols-3 pt-6">
+            {corePillars.map((pillar) => (
+              <div
+                key={pillar.badge}
+                className="glass-card rounded-2xl border border-white/10 p-6 space-y-3"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="rounded-full bg-white/5 px-3 py-1 text-xs font-bold text-indigo-300 border border-white/10">
+                    {pillar.badge}
+                  </span>
+                  {pillar.icon}
+                </div>
+                <h3 className="text-lg font-bold text-white">{pillar.title}</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">{pillar.desc}</p>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
+      {/* 3. BUILT AROUND WHAT INDIAN HOMES SAVE FOR (Appliance Categories - Image 4) */}
+      <section className="py-16 border-b border-white/10">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
+                Curated Household Catalogue
+              </span>
+              <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight mt-1">
+                Built around what Indian homes save for
               </h2>
-              <p className="mt-2 text-sm text-slate-400">
-                Guaranteed brand-new factory sealed units from Apple, Sony, Samsung, Daikin, and Tanishq.
+              <p className="text-xs sm:text-sm text-slate-400 mt-1">
+                Catalogue is fully managed by authorized brand distributors with genuine manufacturer warranty.
               </p>
             </div>
-            
+
             <Link
               to="/products"
-              className="group inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-indigo-400 hover:text-indigo-300 transition"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-400 hover:text-emerald-300 transition"
             >
-              <span>View All 12+ Brand Hardware</span>
-              <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+              <span>View All 80+ Appliances</span>
+              <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
 
-          {/* 4 Featured Products Grid */}
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {featuredProducts.map((product) => (
-              <div
-                key={product.sku}
-                className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-[#131B2E]/60 backdrop-blur-md p-4 transition-all duration-300 hover:-translate-y-1.5 hover:border-indigo-500/40 hover:shadow-glow-indigo"
+          {/* Categories Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            {applianceCategories.map((cat) => (
+              <Link
+                key={cat.name}
+                to={`/products?category=${encodeURIComponent(cat.slug)}`}
+                className="rounded-2xl border border-white/10 bg-[#131B2E]/60 p-4 text-center hover:bg-indigo-600/15 hover:border-indigo-500/50 transition group cursor-pointer"
               >
-                <div>
-                  {/* Image Container with Geometric Abstract Gradient Field */}
-                  <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-gradient-to-br from-slate-900 via-[#1E293B] to-[#131B2E] border border-white/5">
-                    {/* Subtle geometric pattern overlay */}
-                    <div className="absolute inset-0 bg-[radial-gradient(#6366f1_1px,transparent_1px)] [background-size:16px_16px] opacity-20 pointer-events-none" />
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      loading="lazy"
-                    />
-                    
-                    {/* Brand Pill */}
-                    <span className="absolute top-2.5 left-2.5 rounded-lg bg-[#0B0F19]/80 backdrop-blur-md px-2.5 py-1 text-[10px] font-mono font-bold uppercase text-white border border-white/10">
-                      {product.brand}
-                    </span>
-
-                    {/* Neon Emerald Glowing Dot (In Stock Indicator) */}
-                    <span className="absolute top-2.5 right-2.5 flex items-center gap-1.5 rounded-full bg-[#0B0F19]/80 backdrop-blur-md px-2.5 py-1 text-[10px] font-medium text-emerald-300 border border-emerald-500/30">
-                      <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                      </span>
-                      <span>In Stock</span>
-                    </span>
-                  </div>
-
-                  {/* Body Content */}
-                  <div className="mt-4">
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-indigo-400">
-                      {product.category}
-                    </span>
-                    <h3 className="mt-1 text-sm font-bold text-white line-clamp-1 group-hover:text-indigo-200 transition">
-                      {product.name}
-                    </h3>
-                    <p className="mt-1 text-xs text-slate-400 line-clamp-2 leading-relaxed">
-                      {product.description}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Footer Pricing & CTA */}
-                <div className="mt-5 pt-3.5 border-t border-white/10">
-                  <div className="flex items-baseline justify-between mb-3">
-                    <div>
-                      <span className="text-[10px] uppercase font-mono text-slate-400 block">Milestone EMI</span>
-                      <span className="text-lg font-bold font-mono text-emerald-400">
-                        ₹{product.monthlyEmi12.toLocaleString()}
-                      </span>
-                      <span className="text-[10px] text-slate-400"> /mo (12m)</span>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-[10px] text-slate-500 block">Total Capital</span>
-                      <span className="text-xs font-semibold text-slate-300 font-mono">{product.formattedPrice}</span>
-                    </div>
-                  </div>
-
-                  <Link
-                    to={`/products/${product.sku}`}
-                    className="inline-flex w-full items-center justify-center rounded-xl bg-white/5 border border-white/10 py-2.5 text-xs font-bold uppercase tracking-wider text-white transition-all duration-200 hover:bg-indigo-600 hover:border-indigo-500 group-hover:shadow-md"
-                  >
-                    View Details &amp; Plan
-                  </Link>
-                </div>
-              </div>
+                <div className="text-3xl mb-2 group-hover:scale-110 transition-transform">{cat.icon}</div>
+                <div className="text-xs font-bold text-white group-hover:text-indigo-200 truncate">{cat.name}</div>
+                <div className="text-[10px] text-slate-400 mt-0.5">{cat.count}</div>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Membership Pricing Matrix Section */}
-      <section id="plans" className="py-20 sm:py-28 relative">
+      {/* 4. INTERACTIVE BUY-NOW CALCULATOR SECTION */}
+      <section className="py-20 border-b border-white/10 bg-[#070A12]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <BuyNowCalculator />
+        </div>
+      </section>
+
+      {/* 5. SECTION 02: THE SOLUTION - ONE PLATFORM. THREE EXPERIENCES (Image 2) */}
+      <section className="py-20 border-b border-white/10">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
           
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-widest text-emerald-400 mb-2">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-              STRUCTURED SAVINGS MATRIX
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3.5 py-1 text-xs font-semibold text-indigo-400">
+              <span>02 · THE SOLUTION</span>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-sans font-bold text-white tracking-tight">
-              Predictable Monthly Plans. <br />
-              <span className="bg-gradient-to-r from-emerald-400 to-indigo-400 bg-clip-text text-transparent">
-                Zero Compounding Interest.
-              </span>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+              One platform. Three experiences.
             </h2>
-            <p className="mt-4 text-sm sm:text-base text-slate-400 leading-relaxed">
-              Select your monthly installment tier. Every plan accumulates capital towards authentic brand hardware with guaranteed milestone bonuses.
+            <p className="text-sm sm:text-base text-slate-300">
+              Everything runs on a single shared core, so the mobile app, the web portal and your admin console always show the same numbers — in real time.
             </p>
           </div>
 
-          {/* Pricing Cards Matrix */}
-          <div className="grid gap-8 lg:grid-cols-3 items-stretch">
-            {pricingTiers.map((plan) => (
+          {/* Three Experiences Cards */}
+          <div className="grid gap-6 md:grid-cols-3">
+            {threeExperiences.map((exp) => (
               <div
-                key={plan.name}
-                className={`relative flex flex-col justify-between rounded-2xl p-8 backdrop-blur-xl transition-all duration-300 ${
-                  plan.isPopular
-                    ? 'bg-[#131B2E] border-2 border-indigo-500 shadow-glow-indigo lg:-translate-y-3'
-                    : 'bg-[#131B2E]/60 border border-white/10 hover:border-white/20'
-                }`}
+                key={exp.id}
+                className="rounded-3xl border border-white/10 bg-[#131B2E]/80 p-6 flex flex-col justify-between shadow-xl hover:border-indigo-500/40 transition"
               >
-                {/* Floating "Most Popular" Pill Badge */}
-                {plan.isPopular && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                    <span className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-indigo-500 to-indigo-600 px-4 py-1 text-[11px] font-mono font-bold uppercase tracking-wider text-white shadow-lg shadow-indigo-500/50">
-                      <Sparkles className="w-3 h-3 text-emerald-300" />
-                      MOST POPULAR CONVERSION
-                    </span>
-                  </div>
-                )}
-
-                <div>
+                <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
-                      {plan.tier}
-                    </span>
-                    <span className="rounded-md bg-white/5 px-2 py-0.5 text-[10px] font-mono font-semibold text-slate-300 border border-white/10">
-                      {plan.tenure}
+                    <div className="rounded-2xl bg-white/5 p-3 border border-white/10">
+                      {exp.icon}
+                    </div>
+                    <span className="rounded-full bg-white/5 px-2.5 py-0.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                      {exp.lineItem}
                     </span>
                   </div>
 
-                  <h3 className="mt-3 text-xl font-bold text-white">{plan.name}</h3>
-
-                  {/* Large Bold Pricing Value */}
-                  <div className="mt-5 flex items-baseline gap-2">
-                    <span className="text-4xl sm:text-5xl font-extrabold font-mono text-white">
-                      {plan.monthly}
-                    </span>
-                    <span className="text-xs text-slate-400 font-mono">/ month</span>
-                  </div>
-                  <p className="mt-1 text-xs font-semibold text-emerald-400 font-mono">
-                    {plan.totalVal}
-                  </p>
-
-                  <div className="mt-6 border-t border-white/10 pt-4">
-                    <span className="text-[10px] font-mono font-semibold uppercase tracking-wider text-slate-400 block mb-1">
-                      Target Equipment:
-                    </span>
-                    <p className="text-xs text-slate-300 leading-relaxed font-medium">
-                      {plan.target}
-                    </p>
+                  <div>
+                    <h3 className="text-xl font-bold text-white">{exp.title}</h3>
+                    <p className="mt-2 text-xs text-slate-400 leading-relaxed">{exp.desc}</p>
                   </div>
 
-                  {/* Structured Checklist with Thin-line Icons */}
-                  <div className="mt-6 space-y-3 border-t border-white/10 pt-6">
-                    {plan.features.map((feature, idx) => (
-                      <div key={idx} className="flex items-start gap-2.5 text-xs text-slate-300">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                        <span className="leading-5">{feature}</span>
-                      </div>
+                  <ul className="space-y-2 pt-2 border-t border-white/5">
+                    {exp.features.map((f, i) => (
+                      <li key={i} className="flex items-start gap-2 text-xs text-slate-300">
+                        <Check className="h-3.5 w-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                        <span>{f}</span>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </div>
+              </div>
+            ))}
+          </div>
 
-                {/* Sleek Rounded Rectangle CTA Button */}
-                <div className="mt-8 pt-6 border-t border-white/10">
-                  <Link
-                    to="/signup"
-                    className={`inline-flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-md ${
-                      plan.isPopular
-                        ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white hover:from-indigo-600 hover:to-indigo-700 shadow-indigo-500/25 hover:shadow-indigo-500/40'
-                        : 'border border-white/15 bg-white/5 text-white hover:bg-white/10 hover:border-white/30'
-                    }`}
-                  >
-                    <span>Activate {plan.name}</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
+          {/* Shared Core Platform Blueprint (Image 2 Blueprint block) */}
+          <div className="rounded-3xl border border-indigo-500/30 bg-gradient-to-b from-indigo-950/40 to-[#0B0F19] p-8 space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-white/10 pb-4">
+              <div className="flex items-center gap-3">
+                <Database className="h-6 w-6 text-indigo-400" />
+                <div>
+                  <h3 className="text-lg font-bold text-white">Shared Core Platform</h3>
+                  <span className="text-xs text-slate-400">Built once, powers web portal, mobile app &amp; management console</span>
                 </div>
+              </div>
+              <span className="rounded-full bg-indigo-500/20 px-3 py-1 text-xs font-bold text-indigo-300 border border-indigo-500/30">
+                Single Real-Time Source of Truth
+              </span>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 text-xs">
+              <div className="rounded-xl bg-[#0B0F19] p-4 border border-white/5">
+                <span className="font-bold text-white block">Savings-Fund Ledger</span>
+                <span className="text-slate-400 text-[11px]">Double-entry, auditable, immutable balance accounting</span>
+              </div>
+              <div className="rounded-xl bg-[#0B0F19] p-4 border border-white/5">
+                <span className="font-bold text-white block">No-Cost EMI Engine</span>
+                <span className="text-slate-400 text-[11px]">Dynamic 3/6/9/12 month schedules, 0% interest logic</span>
+              </div>
+              <div className="rounded-xl bg-[#0B0F19] p-4 border border-white/5">
+                <span className="font-bold text-white block">Collections &amp; Recon</span>
+                <span className="text-slate-400 text-[11px]">Daily UPI AutoPay &amp; e-NACH automated reconciliation</span>
+              </div>
+              <div className="rounded-xl bg-[#0B0F19] p-4 border border-white/5">
+                <span className="font-bold text-white block">Orders &amp; Fulfilment</span>
+                <span className="text-slate-400 text-[11px]">Real-time inventory checkout to doorstep delivery tracking</span>
+              </div>
+              <div className="rounded-xl bg-[#0B0F19] p-4 border border-white/5">
+                <span className="font-bold text-white block">Smart Notifications</span>
+                <span className="text-slate-400 text-[11px]">Push, SMS, and WhatsApp alerts for debits and deliveries</span>
+              </div>
+              <div className="rounded-xl bg-[#0B0F19] p-4 border border-white/5">
+                <span className="font-bold text-white block">Identity &amp; Security</span>
+                <span className="text-slate-400 text-[11px]">DLT OTP, Aadhaar e-KYC, RBAC, and full audit trail</span>
+              </div>
+            </div>
+
+            {/* Integrations bar */}
+            <div className="pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-4 text-xs text-slate-400">
+              <span className="font-semibold text-slate-300">Supported Integrations:</span>
+              <div className="flex flex-wrap gap-2">
+                <span className="rounded-lg bg-white/5 px-2.5 py-1 text-[11px] text-slate-300">UPI AutoPay / e-NACH</span>
+                <span className="rounded-lg bg-white/5 px-2.5 py-1 text-[11px] text-slate-300">PAN / Aadhaar e-KYC</span>
+                <span className="rounded-lg bg-white/5 px-2.5 py-1 text-[11px] text-slate-300">SMS &amp; OTP (DLT)</span>
+                <span className="rounded-lg bg-white/5 px-2.5 py-1 text-[11px] text-slate-300">Push Notifications</span>
+                <span className="rounded-lg bg-white/5 px-2.5 py-1 text-[11px] text-slate-300">Logistics &amp; Dispatch</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* 6. SECTION 05: FINTECH-GRADE ENGINEERING & SECURITY (Image 5) */}
+      <section className="py-20 border-b border-white/10 bg-[#070A12]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
+          
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1 text-xs font-semibold text-emerald-400">
+              <span>05 · TECHNOLOGY &amp; SECURITY</span>
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+              Fintech-grade engineering,<br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-indigo-400">
+                from the first line of code.
+              </span>
+            </h2>
+            <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
+              When a product handles people’s savings, trust is the product. We build on a modern, proven stack and treat money movement with the rigour it deserves.
+            </p>
+          </div>
+
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {securityPillars.map((sp) => (
+              <div
+                key={sp.title}
+                className="glass-card rounded-2xl border border-white/10 p-5 space-y-2.5 hover:border-emerald-500/40 transition"
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className="rounded-xl bg-white/5 p-2 border border-white/10">
+                    {sp.icon}
+                  </div>
+                  <h3 className="text-sm font-bold text-white">{sp.title}</h3>
+                </div>
+                <p className="text-xs text-slate-400 leading-relaxed">{sp.desc}</p>
               </div>
             ))}
           </div>
@@ -414,28 +619,35 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Authorized Retail Partners Marquee Bar */}
-      <section className="border-y border-white/10 bg-[#0F172A]/50 py-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-xs font-mono font-semibold uppercase tracking-[0.25em] text-slate-400 mb-8">
-            // FULFILLMENT &amp; DIRECT LOGISTICS INFRASTRUCTURE
+      {/* 7. CTA BANNER */}
+      <section className="py-20 relative overflow-hidden">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center space-y-6">
+          <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-1.5 text-xs font-bold text-amber-300">
+            <Sparkles className="h-3.5 w-3.5" />
+            <span>Start Building Your Appliance Fund Today</span>
+          </div>
+
+          <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+            Ready to bring home your next appliance interest-free?
+          </h2>
+
+          <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto">
+            Set up an auto-save mandate with as little as ₹50 per day. Withdraw anytime with zero penalties or apply directly to any appliance with 0% EMI.
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-8 sm:gap-14 text-sm font-mono font-semibold text-slate-300">
-            <span className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:border-indigo-500/40 transition">
-              CROMA · A TATA ENTERPRISE
-            </span>
-            <span className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:border-indigo-500/40 transition">
-              RELIANCE DIGITAL
-            </span>
-            <span className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:border-indigo-500/40 transition">
-              VIJAY SALES
-            </span>
-            <span className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:border-indigo-500/40 transition">
-              TANISHQ JEWELLERY
-            </span>
-            <span className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:border-indigo-500/40 transition">
-              TATA CLIQ LUXURY
-            </span>
+
+          <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+            <Link
+              to="/signup"
+              className="rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 px-8 py-4 text-xs font-bold uppercase tracking-wider text-black shadow-xl shadow-orange-500/30 hover:from-amber-400 hover:to-orange-400 transition"
+            >
+              Open Auto-Save Account
+            </Link>
+            <Link
+              to="/admin/login"
+              className="rounded-xl border border-white/10 bg-[#131B2E] px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-200 hover:text-white transition"
+            >
+              Admin &amp; Management Console
+            </Link>
           </div>
         </div>
       </section>
