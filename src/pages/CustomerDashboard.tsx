@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Sparkles, ShieldCheck, CheckCircle2, ArrowRight, CreditCard, Gift, Wallet, Package } from 'lucide-react'
+import { Sparkles, ShieldCheck, CheckCircle2, CreditCard, Package } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 
 export default function CustomerDashboard() {
