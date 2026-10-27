@@ -1,24 +1,38 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="light">
   <head>
     <meta charset="UTF-8" />
     <script>
+      // Immediate theme initialization to prevent flash
+      (function() {
+        try {
+          var saved = localStorage.getItem('savenbuy_theme');
+          if (saved === 'dark') {
+            document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+          } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+          }
+        } catch(e) {}
+      })();
+
       // Seamless GitHub Pages fallback: If deployed from root instead of /docs, auto-redirect to /docs/
       if (window.location.hostname.includes('github.io') && !window.location.pathname.includes('/docs/')) {
         var base = window.location.pathname.endsWith('/') ? window.location.pathname : window.location.pathname + '/';
         window.location.replace(base + 'docs/');
       }
     </script>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2228%22 fill=%22%230B0F19%22/><path d=%22M30 70 L30 30 L50 30 L50 60 L70 60 L70 70 Z%22 fill=%22%236366F1%22/><circle cx=%2268%22 cy=%2234%22 r=%228%22 fill=%22%2310B981%22/></svg>" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2228%22 fill=%22%234F46E5%22/><path d=%22M30 70 L30 30 L50 30 L50 60 L70 60 L70 70 Z%22 fill=%22%23FFFFFF%22/><circle cx=%2268%22 cy=%2234%22 r=%228%22 fill=%22%2310B981%22/></svg>" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SaveNBuy | Next-Gen Milestone Finance & Savings Platform</title>
-    <meta name="description" content="Next-generation consumer durable finance and disciplined savings membership. Zero interest, transparent milestones, and genuine flagship electronics & gold." />
+    <title>SaveNBuy | Auto-Savings & 0% No-Cost EMI Platform</title>
+    <meta name="description" content="Auto-savings platform where customers build a fund through small automatic debits — and can buy home appliances anytime, using their savings, with the balance on no-cost EMI." />
     <!-- Modern Tech Fonts: Plus Jakarta Sans & Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   </head>
-  <body class="bg-[#0B0F19] text-slate-100 antialiased selection:bg-indigo-500/30 selection:text-indigo-200">
+  <body class="bg-[#F8FAFC] text-slate-900 dark:bg-[#0B0F19] dark:text-slate-100 antialiased selection:bg-indigo-500/30 selection:text-indigo-200 min-h-screen">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

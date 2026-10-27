@@ -1,6 +1,7 @@
 import React from 'react'
 import { HashRouter as Router, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
+import { ThemeProvider } from './context/ThemeContext'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 
@@ -42,10 +43,11 @@ import EmployeeSignup from './pages/EmployeeSignup'
 
 export default function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <div className="flex flex-col min-h-screen bg-cream text-navy">
-          <Navbar />
+    <ThemeProvider>
+      <AuthProvider>
+        <Router>
+          <div className="flex flex-col min-h-screen bg-[#F8FAFC] dark:bg-[#0B0F19] text-slate-900 dark:text-slate-100 transition-colors duration-200">
+            <Navbar />
           <main className="flex-1">
             <Routes>
               {/* Public Routes */}
@@ -95,6 +97,7 @@ export default function App() {
         </div>
       </Router>
     </AuthProvider>
-  )
+  </ThemeProvider>
+)
 }
 
