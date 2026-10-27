@@ -1,5 +1,5 @@
 import React from 'react'
-import { HelpCircle, ChevronDown, Sparkles, ShieldCheck, CheckCircle2, Zap, Percent, Lock } from 'lucide-react'
+import { HelpCircle, ShieldCheck } from 'lucide-react'
 
 export default function FAQ() {
   const faqs = [
@@ -34,17 +34,17 @@ export default function FAQ() {
   ]
 
   return (
-    <div className="min-h-screen bg-[#0B0F19] text-slate-100 py-16 radial-mesh">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 py-16 radial-mesh">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-        <div className="rounded-3xl border border-white/10 bg-[#131B2E]/80 p-8 sm:p-12 shadow-2xl backdrop-blur-xl">
-          <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-1.5 text-xs font-semibold text-amber-300 mb-4">
-            <HelpCircle className="h-3.5 w-3.5 text-amber-400" />
+        <div className="rounded-3xl border border-slate-200 bg-white p-8 sm:p-12 shadow-sm">
+          <div className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-4 py-1.5 text-xs font-semibold text-amber-800 mb-4 shadow-sm">
+            <HelpCircle className="h-3.5 w-3.5 text-amber-600" />
             <span>Customer Knowledge Base</span>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
             Frequently Asked Questions
           </h1>
-          <p className="mt-3 text-xs sm:text-sm text-slate-400 leading-relaxed max-w-2xl">
+          <p className="mt-3 text-xs sm:text-sm text-slate-600 leading-relaxed max-w-2xl">
             Everything you need to know about UPI AutoPay micro-savings, fund withdrawals, 0% no-cost EMIs, and genuine brand appliance fulfillment.
           </p>
 
@@ -52,24 +52,24 @@ export default function FAQ() {
             {faqs.map((item, idx) => (
               <div
                 key={idx}
-                className="rounded-2xl border border-white/10 bg-[#0B0F19]/70 p-6 backdrop-blur-md hover:border-indigo-500/40 transition-all duration-200"
+                className="rounded-2xl border border-slate-200 bg-slate-50/70 p-6 hover:bg-slate-50 hover:border-indigo-300 transition-all duration-200"
               >
-                <h3 className="text-sm sm:text-base font-bold text-white flex items-center justify-between">
+                <h3 className="text-sm sm:text-base font-bold text-slate-900 flex items-center justify-between">
                   <span>{item.q}</span>
                 </h3>
-                <p className="mt-3 text-xs sm:text-sm leading-relaxed text-slate-300">{item.a}</p>
+                <p className="mt-3 text-xs sm:text-sm leading-relaxed text-slate-600">{item.a}</p>
               </div>
             ))}
           </div>
 
-          <div className="mt-10 rounded-2xl bg-[#0B0F19]/90 p-5 border border-white/10 text-xs text-slate-400 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="mt-10 rounded-2xl bg-slate-50 p-5 border border-slate-200 text-xs text-slate-600 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <ShieldCheck className="h-5 w-5 text-emerald-400 shrink-0" />
+              <ShieldCheck className="h-5 w-5 text-emerald-600 shrink-0" />
               <span>Have additional questions or need mandate support?</span>
             </div>
             <a
               href="mailto:support@savenbuy.in"
-              className="inline-flex items-center gap-1.5 text-emerald-400 font-bold hover:underline"
+              className="inline-flex items-center gap-1.5 text-emerald-700 font-bold hover:underline"
             >
               Contact Support Desk →
             </a>

@@ -51,7 +51,7 @@ export default function App() {
               {/* Public Routes */}
               <Route path="/" element={<Home />} />
               <Route path="/plans" element={<Plans />} />
-              <Route path="/calculator" element={<div className="min-h-screen bg-[#0B0F19] py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto"><BuyNowCalculator /></div>} />
+              <Route path="/calculator" element={<div className="min-h-screen bg-slate-50 py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto"><BuyNowCalculator /></div>} />
               <Route path="/products" element={<Products />} />
               <Route path="/products/:slug" element={<ProductDetail />} />
               <Route path="/login" element={<Login />} />

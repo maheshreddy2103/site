@@ -10,34 +10,32 @@ export default {
   theme: {
     extend: {
       colors: {
-        // FinTech design tokens
+        // FinTech design tokens (Whitish light mode)
         fintech: {
-          dark: '#0B0F19',
-          card: '#131B2E',
-          surface: '#1E293B',
+          light: '#F8FAFC',
+          card: '#FFFFFF',
+          surface: '#F1F5F9',
           emerald: '#10B981',
           indigo: '#6366F1',
           cyan: '#06B6D4',
-          slate: '#94A3B8'
+          slate: '#475569'
         },
-        // Fallback mapping for seamless dark-theme compliance across all legacy components
-        cream: '#0B0F19',
-        navy: '#F8FAFC',
-        'brand-maroon': '#6366F1',
-        'brand-gold': 'rgba(255, 255, 255, 0.12)',
-        'brand-cream': '#131B2E'
+        cream: '#F8FAFC',
+        navy: '#0F172A',
+        'brand-maroon': '#4F46E5',
+        'brand-gold': 'rgba(15, 23, 42, 0.06)',
+        'brand-cream': '#FFFFFF'
       },
       fontFamily: {
         sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace']
       },
       boxShadow: {
-        'glow-indigo': '0 0 25px -5px rgba(99, 102, 241, 0.35)',
-        'glow-emerald': '0 0 25px -5px rgba(16, 185, 129, 0.35)',
-        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
+        'glow-indigo': '0 0 25px -5px rgba(99, 102, 241, 0.25)',
+        'glow-emerald': '0 0 25px -5px rgba(16, 185, 129, 0.25)',
+        'glass': '0 4px 20px -2px rgba(15, 23, 42, 0.06)'
       }
     }
   },
   plugins: [typography]
 }
-

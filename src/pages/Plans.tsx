@@ -83,34 +83,34 @@ export default function Plans() {
   const [customFreq, setCustomFreq] = useState<'daily' | 'weekly' | 'monthly'>('daily')
 
   return (
-    <div className="min-h-screen bg-[#0B0F19] py-16 text-slate-100 radial-mesh">
+    <div className="min-h-screen bg-[#F8FAFC] py-16 text-slate-900 radial-mesh">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-16">
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-1.5 text-xs font-semibold text-amber-300">
-            <Zap className="h-3.5 w-3.5 text-amber-400" />
+          <div className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-4 py-1.5 text-xs font-bold text-amber-800">
+            <Zap className="h-3.5 w-3.5 text-amber-600" />
             <span>UPI AutoPay Mandates</span>
           </div>
-          <h1 className="text-4xl font-extrabold sm:text-5xl text-white tracking-tight">
+          <h1 className="text-4xl font-extrabold sm:text-5xl text-slate-900 tracking-tight">
             Save a little every day.<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-emerald-400">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-emerald-600">
               Own home appliances at 0% EMI.
             </span>
           </h1>
-          <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
             The fund is your own money — with no investment risks and no reward points gimmicks. Its value is pure savings discipline and interest-free buying.
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-2 text-xs text-slate-400">
+          <div className="flex flex-wrap items-center justify-center gap-4 pt-2 text-xs text-slate-600 font-semibold">
             <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-emerald-400" /> 100% Customer Owned Fund
+              <CheckCircle2 className="h-4 w-4 text-emerald-600" /> 100% Customer Owned Fund
             </span>
             <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-emerald-400" /> Zero Interest on Balance EMI
+              <CheckCircle2 className="h-4 w-4 text-emerald-600" /> Zero Interest on Balance EMI
             </span>
             <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-emerald-400" /> Pause or Withdraw Anytime
+              <CheckCircle2 className="h-4 w-4 text-emerald-600" /> Pause or Withdraw Anytime
             </span>
           </div>
         </div>
@@ -122,13 +122,13 @@ export default function Plans() {
               key={plan.name}
               className={`relative flex flex-col justify-between rounded-3xl border transition-all duration-300 p-8 ${
                 plan.highlight
-                  ? 'border-amber-500/80 bg-gradient-to-b from-[#1E293B] to-[#0F172A] shadow-2xl shadow-amber-500/10'
-                  : 'border-white/10 bg-[#131B2E]/60 hover:border-white/20'
+                  ? 'border-amber-300 bg-white shadow-xl shadow-amber-500/10'
+                  : 'border-slate-200 bg-white shadow-sm hover:border-slate-300 hover:shadow-md'
               }`}
             >
               {plan.highlight && (
                 <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                  <span className="rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-4 py-1 text-[11px] font-extrabold uppercase tracking-wider text-black shadow-lg">
+                  <span className="rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-4 py-1 text-[11px] font-extrabold uppercase tracking-wider text-black shadow-md">
                     {plan.badge}
                   </span>
                 </div>
@@ -136,56 +136,56 @@ export default function Plans() {
 
               <div>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
                     {plan.frequency}
                   </span>
                   {!plan.highlight && (
-                    <span className="rounded-full bg-white/5 px-2.5 py-0.5 text-[10px] font-semibold text-slate-400">
+                    <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-[10px] font-bold text-slate-600">
                       {plan.badge}
                     </span>
                   )}
                 </div>
 
-                <h3 className="mt-2 text-2xl font-extrabold text-white">{plan.name}</h3>
-                <p className="mt-2 text-xs text-slate-400 leading-relaxed">{plan.description}</p>
+                <h3 className="mt-2 text-2xl font-extrabold text-slate-900">{plan.name}</h3>
+                <p className="mt-2 text-xs text-slate-600 leading-relaxed">{plan.description}</p>
 
                 {/* Amount Callout */}
-                <div className="mt-6 rounded-2xl bg-[#0B0F19]/80 p-4 border border-white/5">
+                <div className="mt-6 rounded-2xl bg-slate-50 p-4 border border-slate-200">
                   <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-extrabold text-amber-400">{plan.amount}</span>
-                    <span className="text-sm font-semibold text-slate-400">{plan.unit}</span>
+                    <span className="text-4xl font-extrabold text-amber-600">{plan.amount}</span>
+                    <span className="text-sm font-semibold text-slate-500">{plan.unit}</span>
                   </div>
-                  <span className="mt-1 block text-[11px] font-mono text-emerald-400">
+                  <span className="mt-1 block text-[11px] font-mono font-bold text-emerald-700">
                     {plan.monthlyEquiv}
                   </span>
                 </div>
 
                 <div className="mt-4 text-xs">
-                  <span className="text-slate-400 font-semibold block mb-1">Recommended For:</span>
-                  <p className="text-indigo-300 font-medium">{plan.target}</p>
+                  <span className="text-slate-500 font-semibold block mb-1">Recommended For:</span>
+                  <p className="text-indigo-700 font-bold">{plan.target}</p>
                 </div>
 
                 {/* Feature Bullet Checklist */}
-                <div className="mt-6 space-y-3 pt-6 border-t border-white/10">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                <div className="mt-6 space-y-3 pt-6 border-t border-slate-100">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block">
                     What's Included:
                   </span>
                   {plan.features.map((feat, i) => (
-                    <div key={i} className="flex items-start gap-2.5 text-xs text-slate-300">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <div key={i} className="flex items-start gap-2.5 text-xs text-slate-700">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
                       <span>{feat}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="mt-8 pt-6 border-t border-white/5">
+              <div className="mt-8 pt-6 border-t border-slate-100">
                 <Link
                   to="/signup"
                   className={`w-full inline-flex items-center justify-center gap-2 rounded-xl py-3.5 text-xs font-bold uppercase tracking-wider transition ${
                     plan.highlight
-                      ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-black shadow-lg shadow-orange-500/25 hover:from-amber-400 hover:to-orange-400'
-                      : 'bg-white/10 text-white hover:bg-white/15'
+                      ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-black shadow-md shadow-orange-500/20 hover:from-amber-400 hover:to-orange-400'
+                      : 'bg-slate-100 text-slate-800 hover:bg-slate-200'
                   }`}
                 >
                   <span>{plan.ctaText}</span>
@@ -197,21 +197,21 @@ export default function Plans() {
         </div>
 
         {/* Custom Auto-Save Mandate Calculator */}
-        <div className="rounded-3xl border border-white/10 bg-[#131B2E]/90 p-8 shadow-2xl backdrop-blur-xl">
+        <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-xl shadow-slate-200/50">
           <div className="max-w-3xl mx-auto text-center space-y-3 mb-8">
-            <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
+            <span className="text-xs font-bold uppercase tracking-wider text-indigo-600">
               Personalized Saving Setup
             </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
               Create a custom auto-save amount tailored to your income
             </h2>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-500">
               Save on your own terms. Adjust the amount or frequency anytime from your web portal or mobile app.
             </p>
           </div>
 
           <div className="max-w-xl mx-auto space-y-6">
-            <div className="grid grid-cols-3 gap-2 rounded-2xl bg-[#0B0F19] p-1.5 border border-white/10">
+            <div className="grid grid-cols-3 gap-2 rounded-2xl bg-slate-100 p-1.5 border border-slate-200">
               {(['daily', 'weekly', 'monthly'] as const).map((freq) => (
                 <button
                   key={freq}
@@ -219,8 +219,8 @@ export default function Plans() {
                   onClick={() => setCustomFreq(freq)}
                   className={`rounded-xl py-2 text-xs font-bold uppercase tracking-wider transition ${
                     customFreq === freq
-                      ? 'bg-indigo-600 text-white shadow-md'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'bg-white text-indigo-700 shadow-sm border border-slate-200'
+                      : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
                   {freq}
@@ -228,13 +228,13 @@ export default function Plans() {
               ))}
             </div>
 
-            <div className="rounded-2xl bg-[#0B0F19] p-6 border border-white/5 text-center space-y-3">
-              <span className="text-xs uppercase text-slate-400 font-semibold block">
+            <div className="rounded-2xl bg-slate-50 p-6 border border-slate-200 text-center space-y-3">
+              <span className="text-xs uppercase text-slate-500 font-bold block">
                 Selected {customFreq} auto-debit
               </span>
-              <div className="text-4xl font-extrabold text-amber-400">
+              <div className="text-4xl font-extrabold text-amber-600">
                 ₹{customAmount.toLocaleString('en-IN')}{' '}
-                <span className="text-sm font-normal text-slate-400">/ {customFreq}</span>
+                <span className="text-sm font-normal text-slate-500">/ {customFreq}</span>
               </div>
               <input
                 type="range"
@@ -243,11 +243,11 @@ export default function Plans() {
                 step={customFreq === 'daily' ? 25 : customFreq === 'weekly' ? 50 : 500}
                 value={customAmount}
                 onChange={(e) => setCustomAmount(Number(e.target.value))}
-                className="w-full h-2 rounded-lg bg-slate-800 accent-amber-400 cursor-pointer"
+                className="w-full h-2 rounded-lg bg-slate-200 accent-amber-500 cursor-pointer"
               />
-              <div className="text-xs text-emerald-400 font-medium">
+              <div className="text-xs text-emerald-800 font-semibold">
                 Annual Savings Fund:{' '}
-                <strong className="text-white">
+                <strong className="text-slate-900 font-bold">
                   ₹
                   {(
                     customAmount *
@@ -260,7 +260,7 @@ export default function Plans() {
 
             <Link
               to="/signup"
-              className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 py-4 text-xs font-bold uppercase tracking-wider text-black shadow-lg shadow-emerald-500/20 hover:from-emerald-400 hover:to-emerald-500 transition"
+              className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 py-4 text-xs font-bold uppercase tracking-wider text-black shadow-md shadow-emerald-500/20 hover:from-emerald-400 hover:to-teal-400 transition"
             >
               <span>Set Up This Mandate via UPI AutoPay</span>
               <ArrowRight className="h-4 w-4" />

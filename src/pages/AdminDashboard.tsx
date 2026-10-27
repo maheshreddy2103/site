@@ -350,7 +350,7 @@ export default function AdminDashboard() {
   ]
 
   return (
-    <div className="min-h-screen bg-[#0B0F19] text-slate-100 py-8 radial-mesh">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 py-8 radial-mesh">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-6">
         
         {/* Toast Alert */}
@@ -362,22 +362,22 @@ export default function AdminDashboard() {
         )}
 
         {/* Top Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-white/10 pb-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-slate-200 pb-6">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3.5 py-1 text-xs font-semibold text-indigo-400 mb-2">
+            <div className="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-3.5 py-1 text-xs font-semibold text-indigo-700 mb-2 shadow-sm">
               <ShieldCheck className="h-3.5 w-3.5" />
               <span>Admin &amp; Operations Console · Line Item 2</span>
             </div>
-            <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+            <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
               Operations Control Room
             </h1>
-            <p className="mt-1 text-xs text-slate-400">
+            <p className="mt-1 text-xs text-slate-500">
               Your team’s command center to run auto-save collections, KYC, catalogue, EMI book, and reconciliation every day.
             </p>
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="inline-flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-2 text-xs font-semibold text-emerald-400">
+            <span className="inline-flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 py-2 text-xs font-semibold text-emerald-700">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -387,7 +387,7 @@ export default function AdminDashboard() {
 
             <button
               onClick={() => showToast('Syncing real-time database ledgers & gateway webhooks...')}
-              className="flex items-center gap-1.5 rounded-xl border border-white/10 bg-[#131B2E] px-3.5 py-2 text-xs font-medium text-slate-300 hover:text-white cursor-pointer"
+              className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 shadow-sm cursor-pointer"
             >
               <RefreshCw className="h-3.5 w-3.5" />
               <span>Reconcile Now</span>
@@ -396,15 +396,15 @@ export default function AdminDashboard() {
         </div>
 
         {/* 11 Modules Horizontal Navigation Bar */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-none border-b border-white/5">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-none border-b border-slate-200">
           {navModules.map((mod) => (
             <button
               key={mod.id}
               onClick={() => setActiveModule(mod.id as any)}
               className={`flex items-center gap-2 whitespace-nowrap rounded-xl px-3.5 py-2.5 text-xs font-bold transition cursor-pointer ${
                 activeModule === mod.id
-                  ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-lg shadow-indigo-500/30'
-                  : 'bg-[#131B2E]/60 text-slate-400 hover:text-white hover:bg-white/5'
+                  ? 'bg-indigo-600 text-white shadow-sm'
+                  : 'bg-white text-slate-600 border border-slate-200 hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
               {mod.icon}
@@ -417,44 +417,44 @@ export default function AdminDashboard() {
         {activeModule === 'business' && (
           <div className="space-y-6">
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              <div className="rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-[#1E293B] to-[#0F172A] p-5 shadow-xl">
-                <span className="text-xs font-bold uppercase tracking-wider text-indigo-300 block">
+              <div className="rounded-2xl border border-indigo-200 bg-gradient-to-br from-indigo-700 to-indigo-900 p-5 shadow-sm text-white">
+                <span className="text-xs font-bold uppercase tracking-wider text-indigo-200 block">
                   Total Fund Balance
                 </span>
                 <div className="mt-2 text-3xl font-extrabold text-white">
                   {businessKpis.totalFundBalance}
                 </div>
-                <p className="mt-1 text-[11px] text-emerald-400 font-medium">
+                <p className="mt-1 text-[11px] text-emerald-300 font-medium">
                   +18.2% MoM growth in savings fund
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-[#131B2E] p-5 shadow-xl">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block">
+              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block">
                   Active Auto-Savers
                 </span>
                 <div className="mt-2 text-3xl font-extrabold text-emerald-400">
                   {businessKpis.activeSavers}
                 </div>
-                <p className="mt-1 text-[11px] text-slate-400">
+                <p className="mt-1 text-[11px] text-slate-500">
                   UPI AutoPay active mandates across India
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-[#131B2E] p-5 shadow-xl">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block">
+              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block">
                   Appliance Orders
                 </span>
                 <div className="mt-2 text-3xl font-extrabold text-amber-400">
                   {businessKpis.orders}
                 </div>
-                <p className="mt-1 text-[11px] text-slate-400">
+                <p className="mt-1 text-[11px] text-slate-500">
                   Fund applied + balance on 0% EMI
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-[#131B2E] p-5 shadow-xl">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block">
+              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block">
                   Active EMI Book &amp; Overdues
                 </span>
                 <div className="mt-2 text-3xl font-extrabold text-indigo-300">
@@ -467,14 +467,14 @@ export default function AdminDashboard() {
             </div>
 
             {/* Illustrative Admin Console Chart from Proposal */}
-            <div className="glass-card rounded-3xl border border-white/10 p-6 shadow-2xl space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-white/10 pb-4">
+            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-200 pb-4">
                 <div>
-                  <h3 className="text-base font-bold text-white flex items-center gap-2">
+                  <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
                     <BarChart3 className="h-4 w-4 text-indigo-400" />
                     Consolidated Collections Trend &amp; Growth Curve
                   </h3>
-                  <span className="text-xs text-slate-400">
+                  <span className="text-xs text-slate-500">
                     Live mirror of <code className="text-indigo-300">admin.yourbrand.in/dashboard</code>
                   </span>
                 </div>
@@ -486,7 +486,7 @@ export default function AdminDashboard() {
               </div>
 
               {/* Vector Trendline SVG mimicking image */}
-              <div className="relative h-48 w-full overflow-hidden rounded-2xl bg-[#0B0F19] p-4 flex items-end">
+              <div className="relative h-48 w-full overflow-hidden rounded-2xl bg-slate-50 p-4 flex items-end">
                 <svg className="w-full h-36" viewBox="0 0 500 120" fill="none" preserveAspectRatio="none">
                   <defs>
                     <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
@@ -505,7 +505,7 @@ export default function AdminDashboard() {
                     fill="none"
                   />
                 </svg>
-                <div className="absolute top-4 left-4 text-xs font-mono text-slate-400">
+                <div className="absolute top-4 left-4 text-xs font-mono text-slate-500">
                   Monthly Collections Momentum
                 </div>
               </div>
@@ -515,31 +515,31 @@ export default function AdminDashboard() {
 
         {/* MODULE 2: CUSTOMER & KYC */}
         {activeModule === 'customers' && (
-          <div className="glass-card rounded-2xl border border-white/10 p-6 space-y-4">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h3 className="text-base font-bold text-white flex items-center gap-2">
+                <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
                   <Users className="h-4 w-4 text-emerald-400" />
                   Customer Accounts &amp; KYC Verification
                 </h3>
-                <p className="text-xs text-slate-400">Search customers, review KYC, freeze or close accounts</p>
+                <p className="text-xs text-slate-500">Search customers, review KYC, freeze or close accounts</p>
               </div>
 
               <div className="relative min-w-[240px]">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500" />
                 <input
                   type="text"
                   placeholder="Search name, mobile, email..."
                   value={customerSearch}
                   onChange={(e) => setCustomerSearch(e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-[#0B0F19] pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 outline-none focus:border-indigo-500"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 pl-9 pr-3 py-2 text-xs text-slate-900 placeholder-slate-400 outline-none focus:bg-white focus:border-indigo-500"
                 />
               </div>
             </div>
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-[#0B0F19]/80 text-slate-400 uppercase tracking-wider text-[10px] border-b border-white/10">
+                <thead className="bg-slate-50 text-slate-500 uppercase tracking-wider text-[10px] border-b border-slate-200">
                   <tr>
                     <th className="py-3 px-4">Customer ID &amp; Name</th>
                     <th className="py-3 px-4">Contact</th>
@@ -549,7 +549,7 @@ export default function AdminDashboard() {
                     <th className="py-3 px-4 text-right">Account Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/5">
+                <tbody className="divide-y divide-slate-100">
                   {customers
                     .filter(
                       (c) =>
@@ -558,20 +558,20 @@ export default function AdminDashboard() {
                         c.id.toLowerCase().includes(customerSearch.toLowerCase())
                     )
                     .map((c) => (
-                      <tr key={c.id} className="hover:bg-white/[0.02]">
+                      <tr key={c.id} className="hover:bg-slate-50/70">
                         <td className="py-3.5 px-4">
-                          <div className="font-bold text-white">{c.name}</div>
+                          <div className="font-bold text-slate-900">{c.name}</div>
                           <div className="text-[10px] font-mono text-indigo-300">{c.id}</div>
                         </td>
-                        <td className="py-3.5 px-4 text-slate-300">
+                        <td className="py-3.5 px-4 text-slate-600">
                           <div>{c.mobile}</div>
-                          <div className="text-[10px] text-slate-400">{c.email}</div>
+                          <div className="text-[10px] text-slate-500">{c.email}</div>
                         </td>
                         <td className="py-3.5 px-4 font-bold text-amber-400">
                           ₹{c.fundBalance.toLocaleString('en-IN')}
                         </td>
                         <td className="py-3.5 px-4">
-                          <div className="text-white font-medium">{c.activeAppliance}</div>
+                          <div className="text-slate-900 font-medium">{c.activeAppliance}</div>
                           <div className="text-[10px] text-emerald-400">{c.emiDue}</div>
                         </td>
                         <td className="py-3.5 px-4">
@@ -605,8 +605,8 @@ export default function AdminDashboard() {
                             onClick={() => handleToggleAccountFreeze(c.id)}
                             className={`rounded-lg px-2.5 py-1 text-[11px] font-semibold border ${
                               c.accountStatus === 'FROZEN'
-                                ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
-                                : 'bg-white/5 text-slate-300 border-white/10 hover:text-white'
+                                ? 'bg-amber-50 text-amber-800 border-amber-200'
+                                : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100 hover:text-slate-900'
                             }`}
                           >
                             {c.accountStatus === 'FROZEN' ? 'Unfreeze' : 'Freeze'}
@@ -622,19 +622,19 @@ export default function AdminDashboard() {
 
         {/* MODULE 3: CATALOGUE & PRICING */}
         {activeModule === 'catalogue' && (
-          <div className="glass-card rounded-2xl border border-white/10 p-6 space-y-4">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h3 className="text-base font-bold text-white flex items-center gap-2">
+                <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
                   <Package className="h-4 w-4 text-indigo-400" />
                   Appliance Catalogue &amp; Pricing Management
                 </h3>
-                <p className="text-xs text-slate-400">Add and edit appliances, prices, stock status, and brand details</p>
+                <p className="text-xs text-slate-500">Add and edit appliances, prices, stock status, and brand details</p>
               </div>
 
               <button
                 onClick={() => showToast('Opening Add New Appliance Form...')}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-indigo-600 px-3.5 py-2 text-xs font-bold text-white hover:bg-indigo-500"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-indigo-600 px-3.5 py-2 text-xs font-bold text-slate-900 hover:bg-indigo-500"
               >
                 <Plus className="h-3.5 w-3.5" />
                 <span>Add Appliance</span>
@@ -643,7 +643,7 @@ export default function AdminDashboard() {
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-[#0B0F19]/80 text-slate-400 uppercase tracking-wider text-[10px] border-b border-white/10">
+                <thead className="bg-slate-50 text-slate-500 uppercase tracking-wider text-[10px] border-b border-slate-200">
                   <tr>
                     <th className="py-3 px-4">Appliance</th>
                     <th className="py-3 px-4">Brand &amp; Category</th>
@@ -653,15 +653,15 @@ export default function AdminDashboard() {
                     <th className="py-3 px-4 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/5">
+                <tbody className="divide-y divide-slate-100">
                   {catalogue.map((p) => (
-                    <tr key={p.sku} className="hover:bg-white/[0.02]">
-                      <td className="py-3 px-4 font-bold text-white flex items-center gap-2">
+                    <tr key={p.sku} className="hover:bg-slate-50/70">
+                      <td className="py-3 px-4 font-bold text-slate-900 flex items-center gap-2">
                         <img src={p.image} alt={p.name} className="h-8 w-8 rounded object-cover" />
                         <span className="truncate max-w-xs">{p.name}</span>
                       </td>
-                      <td className="py-3 px-4 text-slate-300">{p.brand} · {p.category}</td>
-                      <td className="py-3 px-4 font-bold text-white">{p.formattedPrice}</td>
+                      <td className="py-3 px-4 text-slate-600">{p.brand} · {p.category}</td>
+                      <td className="py-3 px-4 font-bold text-slate-900">{p.formattedPrice}</td>
                       <td className="py-3 px-4 text-emerald-400 font-semibold">₹{p.monthlyEmi12}/mo</td>
                       <td className="py-3 px-4">
                         <span
@@ -677,7 +677,7 @@ export default function AdminDashboard() {
                       <td className="py-3 px-4 text-right">
                         <button
                           onClick={() => handleToggleStock(p.sku)}
-                          className="rounded-lg bg-white/5 px-2.5 py-1 text-[11px] font-semibold text-slate-300 hover:text-white border border-white/10"
+                          className="rounded-lg bg-slate-50 px-2.5 py-1 text-[11px] font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 cursor-pointer"
                         >
                           Toggle Stock
                         </button>
@@ -692,49 +692,49 @@ export default function AdminDashboard() {
 
         {/* MODULE 4: PLANS & RULES */}
         {activeModule === 'plans' && (
-          <div className="glass-card rounded-2xl border border-white/10 p-6 space-y-6">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
             <div>
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
+              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
                 <Sliders className="h-4 w-4 text-amber-400" />
                 Plans &amp; Rules Configuration (Zero-Code Rule Engine)
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500">
                 Set auto-save minimums, frequencies, EMI tenures, eligibility, and withdrawal policy — no code changes.
               </p>
             </div>
 
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              <div className="rounded-2xl bg-[#0B0F19] p-5 border border-white/5 space-y-3">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-300 block">
+              <div className="rounded-2xl bg-slate-50 p-5 border border-slate-100 space-y-3">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-600 block">
                   Mandate Thresholds
                 </span>
                 <div>
-                  <label className="text-[11px] text-slate-400 block mb-1">Daily Minimum Debit (₹)</label>
+                  <label className="text-[11px] text-slate-500 block mb-1">Daily Minimum Debit (₹)</label>
                   <input
                     type="number"
                     value={rules.dailyMin}
                     onChange={(e) => setRules({ ...rules, dailyMin: Number(e.target.value) })}
-                    className="w-full rounded-xl border border-white/10 bg-[#131B2E] px-3 py-2 text-xs text-white"
+                    className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-900"
                   />
                 </div>
                 <div>
-                  <label className="text-[11px] text-slate-400 block mb-1">Weekly Minimum Debit (₹)</label>
+                  <label className="text-[11px] text-slate-500 block mb-1">Weekly Minimum Debit (₹)</label>
                   <input
                     type="number"
                     value={rules.weeklyMin}
                     onChange={(e) => setRules({ ...rules, weeklyMin: Number(e.target.value) })}
-                    className="w-full rounded-xl border border-white/10 bg-[#131B2E] px-3 py-2 text-xs text-white"
+                    className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-900"
                   />
                 </div>
               </div>
 
-              <div className="rounded-2xl bg-[#0B0F19] p-5 border border-white/5 space-y-3">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-300 block">
+              <div className="rounded-2xl bg-slate-50 p-5 border border-slate-100 space-y-3">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-700 block">
                   0% EMI Tenures Enabled
                 </span>
                 <div className="space-y-2 text-xs">
                   {[3, 6, 9, 12].map((m) => (
-                    <label key={m} className="flex items-center gap-2 text-slate-200 cursor-pointer">
+                    <label key={m} className="flex items-center gap-2 text-slate-700 cursor-pointer">
                       <input
                         type="checkbox"
                         checked={rules.tenuresEnabled[m as 3 | 6 | 9 | 12]}
@@ -753,26 +753,26 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
-              <div className="rounded-2xl bg-[#0B0F19] p-5 border border-white/5 space-y-3">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-300 block">
+              <div className="rounded-2xl bg-slate-50 p-5 border border-slate-100 space-y-3">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-700 block">
                   Withdrawal &amp; Eligibility Policy
                 </span>
                 <div>
-                  <label className="text-[11px] text-slate-400 block mb-1">Eligibility Minimum Fund (₹)</label>
+                  <label className="text-[11px] text-slate-500 block mb-1">Eligibility Minimum Fund (₹)</label>
                   <input
                     type="number"
                     value={rules.eligibilityMinFund}
                     onChange={(e) => setRules({ ...rules, eligibilityMinFund: Number(e.target.value) })}
-                    className="w-full rounded-xl border border-white/10 bg-[#131B2E] px-3 py-2 text-xs text-white"
+                    className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-900"
                   />
                 </div>
                 <div>
-                  <label className="text-[11px] text-slate-400 block mb-1">Settlement Turnaround (Hours)</label>
+                  <label className="text-[11px] text-slate-500 block mb-1">Settlement Turnaround (Hours)</label>
                   <input
                     type="number"
                     value={rules.withdrawalSettlementHours}
                     onChange={(e) => setRules({ ...rules, withdrawalSettlementHours: Number(e.target.value) })}
-                    className="w-full rounded-xl border border-white/10 bg-[#131B2E] px-3 py-2 text-xs text-white"
+                    className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-900"
                   />
                 </div>
               </div>
@@ -789,21 +789,21 @@ export default function AdminDashboard() {
 
         {/* MODULE 5: COLLECTIONS & RECONCILIATION */}
         {activeModule === 'collections' && (
-          <div className="glass-card rounded-2xl border border-white/10 p-6 space-y-4">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h3 className="text-base font-bold text-white flex items-center gap-2">
+                <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
                   <RefreshCw className="h-4 w-4 text-cyan-400" />
                   Collections &amp; Payment Gateway Reconciliation
                 </h3>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-slate-500">
                   Auto-save &amp; EMI mandate status, failed debits, retries and daily matching with gateway settlements
                 </p>
               </div>
 
               <button
                 onClick={() => showToast('Automated retry triggered for failed mandate debits!')}
-                className="rounded-xl bg-white/5 border border-white/10 px-3.5 py-2 text-xs font-bold text-slate-200 hover:text-white"
+                className="rounded-xl bg-slate-50 border border-slate-200 px-3.5 py-2 text-xs font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-100 cursor-pointer"
               >
                 Trigger Failed Retries
               </button>
@@ -811,7 +811,7 @@ export default function AdminDashboard() {
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-[#0B0F19]/80 text-slate-400 uppercase tracking-wider text-[10px] border-b border-white/10">
+                <thead className="bg-slate-50 text-slate-600 uppercase tracking-wider text-[10px] border-b border-slate-200">
                   <tr>
                     <th className="py-3 px-4">Mandate ID</th>
                     <th className="py-3 px-4">Customer</th>
@@ -821,21 +821,21 @@ export default function AdminDashboard() {
                     <th className="py-3 px-4">Reconciliation</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/5">
+                <tbody className="divide-y divide-slate-100">
                   {mandates.map((m) => (
-                    <tr key={m.id} className="hover:bg-white/[0.02]">
-                      <td className="py-3 px-4 font-mono font-bold text-indigo-300">{m.id}</td>
-                      <td className="py-3 px-4 text-white font-medium">{m.customer}</td>
-                      <td className="py-3 px-4 font-bold text-amber-400">{m.amount}</td>
-                      <td className="py-3 px-4 text-slate-300">{m.gateway}</td>
-                      <td className="py-3 px-4 text-slate-400">{m.lastDebit}</td>
+                    <tr key={m.id} className="hover:bg-slate-50/70">
+                      <td className="py-3 px-4 font-mono font-bold text-indigo-600">{m.id}</td>
+                      <td className="py-3 px-4 text-slate-900 font-medium">{m.customer}</td>
+                      <td className="py-3 px-4 font-bold text-amber-600">{m.amount}</td>
+                      <td className="py-3 px-4 text-slate-600">{m.gateway}</td>
+                      <td className="py-3 px-4 text-slate-500">{m.lastDebit}</td>
                       <td className="py-3 px-4">
                         {m.reconciled === 'MATCHED' ? (
-                          <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-400 border border-emerald-500/30">
+                          <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-200">
                             ✓ Matched (₹0 Discrepancy)
                           </span>
                         ) : (
-                          <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold text-amber-400 border border-amber-500/30">
+                          <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-800 border border-amber-200">
                             Retry Scheduled (No Bounces)
                           </span>
                         )}
@@ -850,21 +850,21 @@ export default function AdminDashboard() {
 
         {/* MODULE 6: EMI BOOK & OVERDUES */}
         {activeModule === 'emi-book' && (
-          <div className="glass-card rounded-2xl border border-white/10 p-6 space-y-4">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h3 className="text-base font-bold text-white flex items-center gap-2">
-                  <CreditCard className="h-4 w-4 text-emerald-400" />
+                <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                  <CreditCard className="h-4 w-4 text-emerald-600" />
                   EMI Book &amp; Overdue Tracking
                 </h3>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-slate-500">
                   Every active EMI in one view — due and overdue tracking, reminder workflows, follow-up queue
                 </p>
               </div>
 
               <button
                 onClick={() => showToast('Triggered automated WhatsApp & SMS payment reminder notifications!')}
-                className="rounded-xl bg-gradient-to-r from-indigo-500 to-indigo-600 px-3.5 py-2 text-xs font-bold text-white"
+                className="rounded-xl bg-indigo-600 hover:bg-indigo-700 px-3.5 py-2 text-xs font-bold text-white cursor-pointer"
               >
                 Send Automated Reminders
               </button>
@@ -872,7 +872,7 @@ export default function AdminDashboard() {
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-[#0B0F19]/80 text-slate-400 uppercase tracking-wider text-[10px] border-b border-white/10">
+                <thead className="bg-slate-50 text-slate-600 uppercase tracking-wider text-[10px] border-b border-slate-200">
                   <tr>
                     <th className="py-3 px-4">EMI ID</th>
                     <th className="py-3 px-4">Customer</th>
@@ -883,30 +883,30 @@ export default function AdminDashboard() {
                     <th className="py-3 px-4 text-right">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/5">
+                <tbody className="divide-y divide-slate-100">
                   {emiBook.map((e) => (
-                    <tr key={e.id} className="hover:bg-white/[0.02]">
-                      <td className="py-3 px-4 font-mono text-indigo-300 font-bold">{e.id}</td>
-                      <td className="py-3 px-4 text-white font-medium">{e.customer}</td>
-                      <td className="py-3 px-4 text-slate-300">{e.item}</td>
-                      <td className="py-3 px-4 font-semibold text-white">
+                    <tr key={e.id} className="hover:bg-slate-50/70">
+                      <td className="py-3 px-4 font-mono text-indigo-600 font-bold">{e.id}</td>
+                      <td className="py-3 px-4 text-slate-900 font-medium">{e.customer}</td>
+                      <td className="py-3 px-4 text-slate-600">{e.item}</td>
+                      <td className="py-3 px-4 font-semibold text-slate-900">
                         {e.paidTenure} / {e.totalTenure}
                       </td>
-                      <td className="py-3 px-4 font-bold text-emerald-400">
+                      <td className="py-3 px-4 font-bold text-emerald-600">
                         ₹{e.amountDue.toLocaleString('en-IN')}
                       </td>
-                      <td className="py-3 px-4 text-slate-400">{e.dueDate}</td>
+                      <td className="py-3 px-4 text-slate-500">{e.dueDate}</td>
                       <td className="py-3 px-4 text-right">
                         {e.status === 'OVERDUE' ? (
-                          <span className="rounded-full bg-rose-500/10 px-2 py-0.5 text-[10px] font-bold text-rose-400 border border-rose-500/30">
+                          <span className="rounded-full bg-rose-50 px-2 py-0.5 text-[10px] font-bold text-rose-700 border border-rose-200">
                             Overdue (Reminder Sent)
                           </span>
                         ) : e.status === 'UPCOMING' ? (
-                          <span className="rounded-full bg-indigo-500/10 px-2 py-0.5 text-[10px] font-bold text-indigo-300 border border-indigo-500/30">
+                          <span className="rounded-full bg-indigo-50 px-2 py-0.5 text-[10px] font-bold text-indigo-700 border border-indigo-200">
                             Due in 14 Days
                           </span>
                         ) : (
-                          <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-400 border border-emerald-500/30">
+                          <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-200">
                             Cleared
                           </span>
                         )}
@@ -921,20 +921,20 @@ export default function AdminDashboard() {
 
         {/* MODULE 7: ORDERS & FULFILMENT */}
         {activeModule === 'orders' && (
-          <div className="glass-card rounded-2xl border border-white/10 p-6 space-y-4">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
             <div>
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
+              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
                 <Truck className="h-4 w-4 text-amber-400" />
                 Orders &amp; Partner Retail Fulfilment Queue
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500">
                 Order queue, vendor or dispatch assignment, delivery status, and returns handling
               </p>
             </div>
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-[#0B0F19]/80 text-slate-400 uppercase tracking-wider text-[10px] border-b border-white/10">
+                <thead className="bg-slate-50 text-slate-500 uppercase tracking-wider text-[10px] border-b border-slate-200">
                   <tr>
                     <th className="py-3 px-4">Order ID</th>
                     <th className="py-3 px-4">Customer</th>
@@ -944,13 +944,13 @@ export default function AdminDashboard() {
                     <th className="py-3 px-4 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/5">
+                <tbody className="divide-y divide-slate-100">
                   {orders.map((o) => (
-                    <tr key={o.orderId} className="hover:bg-white/[0.02]">
+                    <tr key={o.orderId} className="hover:bg-slate-50/70">
                       <td className="py-3 px-4 font-mono font-bold text-indigo-300">{o.orderId}</td>
-                      <td className="py-3 px-4 text-white font-medium">{o.customer}</td>
-                      <td className="py-3 px-4 text-slate-300">{o.appliance}</td>
-                      <td className="py-3 px-4 text-slate-400">{o.vendor}</td>
+                      <td className="py-3 px-4 text-slate-900 font-medium">{o.customer}</td>
+                      <td className="py-3 px-4 text-slate-600">{o.appliance}</td>
+                      <td className="py-3 px-4 text-slate-500">{o.vendor}</td>
                       <td className="py-3 px-4">
                         <span
                           className={`rounded-full px-2 py-0.5 text-[10px] font-bold border ${
@@ -968,7 +968,7 @@ export default function AdminDashboard() {
                         <select
                           value={o.status}
                           onChange={(e) => handleUpdateOrderStatus(o.orderId, e.target.value)}
-                          className="rounded-lg border border-white/10 bg-[#0B0F19] px-2 py-1 text-[11px] text-slate-200 outline-none"
+                          className="rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-[11px] text-slate-200 outline-none"
                         >
                           <option value="PROCESSING">Processing</option>
                           <option value="DISPATCHED">Dispatched</option>
@@ -985,20 +985,20 @@ export default function AdminDashboard() {
 
         {/* MODULE 8: WITHDRAWALS & REFUNDS (Maker-Checker Workflow) */}
         {activeModule === 'withdrawals' && (
-          <div className="glass-card rounded-2xl border border-white/10 p-6 space-y-4">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
             <div>
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
+              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
                 <ArrowDownLeft className="h-4 w-4 text-rose-400" />
                 Withdrawals &amp; Refunds (Maker-Checker Dual Controls)
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500">
                 Approval workflow with maker-checker controls on every customer payout before money movement
               </p>
             </div>
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-[#0B0F19]/80 text-slate-400 uppercase tracking-wider text-[10px] border-b border-white/10">
+                <thead className="bg-slate-50 text-slate-500 uppercase tracking-wider text-[10px] border-b border-slate-200">
                   <tr>
                     <th className="py-3 px-4">Request ID</th>
                     <th className="py-3 px-4">Customer</th>
@@ -1008,15 +1008,15 @@ export default function AdminDashboard() {
                     <th className="py-3 px-4 text-right">Checker Step</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/5">
+                <tbody className="divide-y divide-slate-100">
                   {withdrawals.map((w) => (
-                    <tr key={w.id} className="hover:bg-white/[0.02]">
+                    <tr key={w.id} className="hover:bg-slate-50/70">
                       <td className="py-3 px-4 font-mono font-bold text-indigo-300">{w.id}</td>
-                      <td className="py-3 px-4 text-white font-medium">{w.customer}</td>
+                      <td className="py-3 px-4 text-slate-900 font-medium">{w.customer}</td>
                       <td className="py-3 px-4 font-bold text-emerald-400">
                         ₹{w.amount.toLocaleString('en-IN')}
                       </td>
-                      <td className="py-3 px-4 text-slate-300">{w.accountNumber}</td>
+                      <td className="py-3 px-4 text-slate-600">{w.accountNumber}</td>
                       <td className="py-3 px-4">
                         {w.makerStatus === 'VERIFIED' ? (
                           <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-400 border border-emerald-500/30">
@@ -1025,7 +1025,7 @@ export default function AdminDashboard() {
                         ) : (
                           <button
                             onClick={() => handleMakerApprove(w.id)}
-                            className="rounded bg-indigo-600 px-2.5 py-1 text-[10px] font-bold text-white"
+                            className="rounded bg-indigo-600 px-2.5 py-1 text-[10px] font-bold text-slate-900"
                           >
                             Verify as Maker
                           </button>
@@ -1057,25 +1057,25 @@ export default function AdminDashboard() {
 
         {/* MODULE 9: CONTENT & ANNOUNCEMENTS */}
         {activeModule === 'content' && (
-          <div className="glass-card rounded-2xl border border-white/10 p-6 space-y-6">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
             <div>
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
+              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
                 <Megaphone className="h-4 w-4 text-amber-400" />
                 Content Management &amp; Customer Announcements
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500">
                 Manage banners and product highlights; send push, SMS, or WhatsApp messages to customer segments
               </p>
             </div>
 
             <div className="grid gap-6 lg:grid-cols-2">
-              <div className="rounded-2xl bg-[#0B0F19] p-5 border border-white/5 space-y-4">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-300 block">
+              <div className="rounded-2xl bg-slate-50 p-5 border border-slate-100 space-y-4">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-600 block">
                   Broadcast Direct Message
                 </span>
 
                 <div>
-                  <label className="text-[11px] text-slate-400 block mb-1">Broadcast Channel</label>
+                  <label className="text-[11px] text-slate-500 block mb-1">Broadcast Channel</label>
                   <div className="grid grid-cols-3 gap-2">
                     {(['whatsapp', 'sms', 'push'] as const).map((ch) => (
                       <button
@@ -1085,7 +1085,7 @@ export default function AdminDashboard() {
                         className={`rounded-xl py-2 text-xs font-bold uppercase ${
                           announcementChannel === ch
                             ? 'bg-indigo-600 text-white'
-                            : 'bg-white/5 text-slate-400'
+                            : 'bg-slate-50 text-slate-500'
                         }`}
                       >
                         {ch}
@@ -1095,12 +1095,12 @@ export default function AdminDashboard() {
                 </div>
 
                 <div>
-                  <label className="text-[11px] text-slate-400 block mb-1">Message Text</label>
+                  <label className="text-[11px] text-slate-500 block mb-1">Message Text</label>
                   <textarea
                     rows={4}
                     value={announcementText}
                     onChange={(e) => setAnnouncementText(e.target.value)}
-                    className="w-full rounded-xl border border-white/10 bg-[#131B2E] p-3 text-xs text-white outline-none focus:border-indigo-500"
+                    className="w-full rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-900 outline-none focus:border-indigo-500"
                   />
                 </div>
 
@@ -1110,31 +1110,31 @@ export default function AdminDashboard() {
                       `Broadcast sent to 1,260 active savers via ${announcementChannel.toUpperCase()} gateway!`
                     )
                   }
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-indigo-600 py-3 text-xs font-bold text-white shadow-lg shadow-indigo-500/25"
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 py-3 text-xs font-bold text-white shadow-sm cursor-pointer"
                 >
                   <Send className="h-4 w-4" />
                   <span>Send Broadcast to 1,260 Savers</span>
                 </button>
               </div>
 
-              <div className="rounded-2xl bg-[#0B0F19] p-5 border border-white/5 space-y-4">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-300 block">
+              <div className="rounded-2xl bg-slate-50 p-5 border border-slate-100 space-y-4">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-700 block">
                   Active Web Banners
                 </span>
                 <div className="space-y-2 text-xs">
-                  <div className="p-3 rounded-xl bg-white/[0.03] border border-white/5 flex items-center justify-between">
+                  <div className="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between">
                     <div>
-                      <div className="font-bold text-white">Top Banner: "Save a little. Bring home a lot."</div>
-                      <div className="text-[10px] text-emerald-400">Status: Active on Homepage</div>
+                      <div className="font-bold text-slate-900">Top Banner: "Save a little. Bring home a lot."</div>
+                      <div className="text-[10px] text-emerald-700 font-medium">Status: Active on Homepage</div>
                     </div>
-                    <span className="rounded bg-emerald-500/20 text-emerald-400 px-2 py-0.5 text-[10px] font-bold">Live</span>
+                    <span className="rounded bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 text-[10px] font-bold">Live</span>
                   </div>
-                  <div className="p-3 rounded-xl bg-white/[0.03] border border-white/5 flex items-center justify-between">
+                  <div className="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between">
                     <div>
-                      <div className="font-bold text-white">Promotional: "Whirlpool Double-Door Fridge at ₹1,000/mo"</div>
-                      <div className="text-[10px] text-slate-400">Target: All Customers with fund &gt; ₹3,000</div>
+                      <div className="font-bold text-slate-900">Promotional: "Whirlpool Double-Door Fridge at ₹1,000/mo"</div>
+                      <div className="text-[10px] text-slate-500">Target: All Customers with fund &gt; ₹3,000</div>
                     </div>
-                    <span className="rounded bg-emerald-500/20 text-emerald-400 px-2 py-0.5 text-[10px] font-bold">Live</span>
+                    <span className="rounded bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 text-[10px] font-bold">Live</span>
                   </div>
                 </div>
               </div>
@@ -1144,13 +1144,13 @@ export default function AdminDashboard() {
 
         {/* MODULE 10: REPORTS & EXPORTS */}
         {activeModule === 'reports' && (
-          <div className="glass-card rounded-2xl border border-white/10 p-6 space-y-6">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
             <div>
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <FileSpreadsheet className="h-4 w-4 text-emerald-400" />
+              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                <FileSpreadsheet className="h-4 w-4 text-emerald-600" />
                 Reports &amp; Data Exports (CSV / Excel)
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500">
                 Fund, collections, EMI, sales, and customer reports with instant CSV and Excel download
               </p>
             </div>
@@ -1166,15 +1166,15 @@ export default function AdminDashboard() {
               ].map((rep) => (
                 <div
                   key={rep.name}
-                  className="rounded-2xl bg-[#0B0F19] p-5 border border-white/5 flex flex-col justify-between space-y-3"
+                  className="rounded-2xl bg-slate-50 p-5 border border-slate-200 flex flex-col justify-between space-y-3"
                 >
                   <div>
-                    <h4 className="text-xs font-bold text-white">{rep.name}</h4>
-                    <p className="text-[11px] text-slate-400 mt-0.5">{rep.desc}</p>
+                    <h4 className="text-xs font-bold text-slate-900">{rep.name}</h4>
+                    <p className="text-[11px] text-slate-500 mt-0.5">{rep.desc}</p>
                   </div>
                   <button
                     onClick={() => showToast(`Generating and exporting ${rep.name} (CSV)...`)}
-                    className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-white/5 py-2 text-xs font-semibold text-slate-200 hover:text-white hover:bg-white/10 cursor-pointer"
+                    className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white py-2 text-xs font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-100 cursor-pointer shadow-sm"
                   >
                     <Download className="h-3.5 w-3.5" />
                     <span>Export CSV</span>
@@ -1187,20 +1187,20 @@ export default function AdminDashboard() {
 
         {/* MODULE 11: ROLES & AUDIT LOG */}
         {activeModule === 'audit' && (
-          <div className="glass-card rounded-2xl border border-white/10 p-6 space-y-4">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
             <div>
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
+              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
                 <ShieldAlert className="h-4 w-4 text-indigo-400" />
                 Roles &amp; Immutable Audit Log
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500">
                 Role-based access for your team with a complete, time-stamped audit trail
               </p>
             </div>
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-[#0B0F19]/80 text-slate-400 uppercase tracking-wider text-[10px] border-b border-white/10">
+                <thead className="bg-slate-50 text-slate-500 uppercase tracking-wider text-[10px] border-b border-slate-200">
                   <tr>
                     <th className="py-3 px-4">Audit ID</th>
                     <th className="py-3 px-4">Authorized User &amp; Role</th>
@@ -1210,15 +1210,15 @@ export default function AdminDashboard() {
                     <th className="py-3 px-4 text-right">Client IP</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/5">
+                <tbody className="divide-y divide-slate-100">
                   {auditLogs.map((log) => (
-                    <tr key={log.id} className="hover:bg-white/[0.02]">
-                      <td className="py-3 px-4 font-mono font-bold text-indigo-300">{log.id}</td>
-                      <td className="py-3 px-4 text-white font-medium">{log.user}</td>
-                      <td className="py-3 px-4 font-semibold text-emerald-400">{log.action}</td>
-                      <td className="py-3 px-4 text-slate-300">{log.detail}</td>
-                      <td className="py-3 px-4 text-slate-400">{log.time}</td>
-                      <td className="py-3 px-4 text-right font-mono text-slate-400">{log.ip}</td>
+                    <tr key={log.id} className="hover:bg-slate-50/70">
+                      <td className="py-3 px-4 font-mono font-bold text-indigo-600">{log.id}</td>
+                      <td className="py-3 px-4 text-slate-900 font-medium">{log.user}</td>
+                      <td className="py-3 px-4 font-semibold text-emerald-700">{log.action}</td>
+                      <td className="py-3 px-4 text-slate-600">{log.detail}</td>
+                      <td className="py-3 px-4 text-slate-500">{log.time}</td>
+                      <td className="py-3 px-4 text-right font-mono text-slate-500">{log.ip}</td>
                     </tr>
                   ))}
                 </tbody>
