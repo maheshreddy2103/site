@@ -12,11 +12,13 @@ export default function Navbar() {
 
   const portalPath = userRole === 'Customer'
     ? '/customer/dashboard'
-    : userRole === 'CEO' || userRole === 'Manager'
+    : userRole === 'Admin' || userRole === 'CEO'
     ? '/admin/dashboard'
-    : userRole === 'Finance Manager'
+    : userRole === 'Manager'
+    ? '/manager/dashboard'
+    : userRole === 'Finance Manager' || userRole === 'Finance'
     ? '/finance/dashboard'
-    : userRole === 'Sales Manager'
+    : userRole === 'Sales Manager' || userRole === 'Sales'
     ? '/sales/dashboard'
     : userRole
     ? '/employee/dashboard'
@@ -112,6 +114,14 @@ export default function Navbar() {
               </>
             ) : (
               <>
+                <Link
+                  to="/admin/login"
+                  className="hidden sm:inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-slate-300 hover:text-white hover:border-indigo-500/40 transition"
+                  title="Institutional Admin Gateway"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5 text-indigo-400" />
+                  <span>Admin</span>
+                </Link>
                 <Link
                   to="/login"
                   className="rounded-xl px-4 py-2 text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-white transition hover:bg-white/[0.04]"

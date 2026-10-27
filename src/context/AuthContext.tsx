@@ -48,7 +48,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     let role = explicitRole || 'Customer'
     let name = 'Ananya Patel'
 
-    if (email.toLowerCase().includes('ceo')) {
+    if (explicitRole) {
+      role = explicitRole
+      if (role === 'Admin') name = 'Institutional Administrator'
+      else if (role === 'Manager') name = 'Vikram Malhotra'
+      else if (role === 'Finance' || role === 'Finance Manager') name = 'Pooja Iyer'
+      else if (role === 'Sales' || role === 'Sales Manager') name = 'Amit Kumar'
+      else if (role === 'CEO') name = 'Radhika Sharma'
+      else if (role === 'Employee') name = 'Sanjay Verma'
+    } else if (email.toLowerCase().includes('admin')) {
+      role = 'Admin'
+      name = 'Chief Administrator'
+    } else if (email.toLowerCase().includes('ceo')) {
       role = 'CEO'
       name = 'Radhika Sharma'
     } else if (email.toLowerCase().includes('manager')) {

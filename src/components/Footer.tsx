@@ -58,6 +58,16 @@ export default function Footer() {
         {/* Contact / Head Office */}
         <div>
           <p className="text-xs font-bold uppercase tracking-widest text-white">Institutional Desk</p>
+          <div className="mt-3 flex flex-col space-y-1.5 text-xs">
+            <Link to="/admin/login" className="text-indigo-400 font-semibold hover:text-indigo-300 transition flex items-center gap-1">
+              <span>Admin Console Gateway</span>
+              <ArrowUpRight className="h-3 w-3" />
+            </Link>
+            <Link to="/manager/login" className="text-slate-400 hover:text-slate-200 transition flex items-center gap-1">
+              <span>Branch Operations Hub</span>
+              <ArrowUpRight className="h-3 w-3" />
+            </Link>
+          </div>
           <p className="mt-4 text-xs text-slate-300">concierge@savenbuy.in</p>
           <p className="mt-1 text-xs text-slate-300 font-semibold">+91 22 4920 8800 / 1800-419-SAVENBUY</p>
           <p className="mt-3 text-xs leading-5 text-slate-500">

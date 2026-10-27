@@ -53,6 +53,9 @@ export default function App() {
               <Route path="/products" element={<Products />} />
               <Route path="/products/:slug" element={<ProductDetail />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/admin/login" element={<Login defaultMode="admin" />} />
+              <Route path="/admin" element={<Login defaultMode="admin" />} />
+              <Route path="/manager/login" element={<Login defaultMode="admin" />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/about" element={<About />} />
               <Route path="/careers" element={<Careers />} />
