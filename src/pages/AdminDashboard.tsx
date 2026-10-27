@@ -1,325 +1,539 @@
 import React, { useState } from 'react'
 import {
+  BarChart3,
   Users,
-  ShieldCheck,
-  CheckCircle2,
-  Clock,
-  ArrowUpRight,
-  FileText,
   Package,
+  Sliders,
+  RefreshCw,
   CreditCard,
-  TrendingUp,
-  AlertTriangle,
-  Layers,
+  Truck,
+  ArrowDownLeft,
+  Megaphone,
+  FileSpreadsheet,
+  ShieldAlert,
   Search,
   Filter,
-  Check,
-  X,
-  ExternalLink,
-  ChevronRight,
-  Building2,
+  CheckCircle2,
+  AlertCircle,
+  XCircle,
+  ShieldCheck,
+  Plus,
+  ArrowUpRight,
+  Send,
   Download,
-  RefreshCw,
-  Sparkles
+  Lock,
+  Eye,
+  Check,
+  RotateCcw,
+  Clock,
+  Sparkles,
+  Layers,
+  ChevronRight
 } from 'lucide-react'
-
-// Mock Data for Admin Operations
-const initialKycQueue = [
-  {
-    id: 'KYC-8801',
-    name: 'Rajesh Kumar Verma',
-    email: 'rajesh.verma@gmail.com',
-    mobile: '+91 98201 44521',
-    plan: 'Prime Platinum Flagship',
-    item: 'Sony Bravia 55" 4K Google TV',
-    idType: 'Aadhaar + PAN Verified',
-    amount: '₹5,000/mo',
-    date: '27 Oct 2026, 09:15 AM',
-    status: 'PENDING'
-  },
-  {
-    id: 'KYC-8802',
-    name: 'Priyanka Sundaram',
-    email: 'priyanka.s@outlook.com',
-    mobile: '+91 97112 88934',
-    plan: 'Sovereign Elite Assets',
-    item: 'Tanishq 24K Gold Coin (10g)',
-    idType: 'DigiLocker Verified',
-    amount: '₹7,500/mo',
-    date: '27 Oct 2026, 08:40 AM',
-    status: 'PENDING'
-  },
-  {
-    id: 'KYC-8803',
-    name: 'Vikram Malhotra',
-    email: 'vikram.m@techcorp.in',
-    mobile: '+91 99304 11209',
-    plan: 'Smart Essentials Gold',
-    item: 'Apple iPhone 16 (128GB)',
-    idType: 'Passport + PAN Verified',
-    amount: '₹6,658/mo',
-    date: '26 Oct 2026, 06:12 PM',
-    status: 'VERIFIED'
-  }
-]
-
-const initialOrdersQueue = [
-  {
-    orderId: 'ORD-9021',
-    member: 'Ananya Deshmukh',
-    product: 'Apple iPhone 16 (128GB) - Ultramarine',
-    brand: 'Apple',
-    tenure: '12/12 Months Completed',
-    partner: 'Croma Flagship, Lower Parel Mumbai',
-    method: 'Store Pickup Ready',
-    status: 'READY_FOR_PICKUP'
-  },
-  {
-    orderId: 'ORD-9022',
-    member: 'Suresh Narayanan',
-    product: 'Daikin 1.5 Ton 5-Star Inverter AC',
-    brand: 'Daikin',
-    tenure: '9/9 Months Completed',
-    partner: 'Tata CLiQ Express Logistics',
-    method: 'Doorstep Installation Scheduled',
-    status: 'DISPATCHED'
-  },
-  {
-    orderId: 'ORD-9023',
-    member: 'Kavita Patel',
-    product: 'Tanishq 24K 10g Gold Coin CertiCard',
-    brand: 'Tanishq',
-    tenure: '12/12 Months Completed',
-    partner: 'Tanishq Boutique, Bandra West',
-    method: 'Boutique Collection Vault',
-    status: 'READY_FOR_PICKUP'
-  }
-]
-
-const auditLogs = [
-  { id: 'LOG-4410', event: 'Escrow Tranche Clearance', detail: '₹14,80,000 settled into Axis Trustee Escrow account #9012', user: 'System Auto-Batch', time: '10 mins ago', status: 'SUCCESS' },
-  { id: 'LOG-4409', event: 'KYC Identity Approval', detail: 'Member CUST-1049 approved under CKYC registry check', user: 'Manager (ceo@brand.com)', time: '35 mins ago', status: 'SUCCESS' },
-  { id: 'LOG-4408', event: 'Product Allocation Seal', detail: 'Sony Bravia 55" SKU SONY-BRAVIA-55 serial registered for warranty', user: 'Partner Desk (Croma)', time: '1 hour ago', status: 'SUCCESS' },
-  { id: 'LOG-4407', event: 'Installment Default Warning', detail: 'Reminder push triggered for CUST-8831 (due 28 Oct)', user: 'SMS/WhatsApp Gateway', time: '2 hours ago', status: 'INFO' }
-]
+import { productsData } from '../data/products'
 
 export default function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState<'overview' | 'kyc' | 'orders' | 'logs'>('overview')
-  const [kycQueue, setKycQueue] = useState(initialKycQueue)
-  const [ordersQueue, setOrdersQueue] = useState(initialOrdersQueue)
-  const [searchFilter, setSearchFilter] = useState('')
+  const [activeModule, setActiveModule] = useState<
+    | 'business'
+    | 'customers'
+    | 'catalogue'
+    | 'plans'
+    | 'collections'
+    | 'emi-book'
+    | 'orders'
+    | 'withdrawals'
+    | 'content'
+    | 'reports'
+    | 'audit'
+  >('business')
 
-  function handleApproveKyc(id: string) {
-    setKycQueue(prev => prev.map(k => k.id === id ? { ...k, status: 'VERIFIED' } : k))
+  const [toastMessage, setToastMessage] = useState<string | null>(null)
+  function showToast(msg: string) {
+    setToastMessage(msg)
+    setTimeout(() => setToastMessage(null), 3000)
   }
 
-  function handleRejectKyc(id: string) {
-    setKycQueue(prev => prev.map(k => k.id === id ? { ...k, status: 'REJECTED' } : k))
+  // --- 1. Business Dashboard State ---
+  const businessKpis = {
+    totalFundBalance: '₹8.4L',
+    activeSavers: 1260,
+    orders: 94,
+    emiBookValue: '₹42.8L',
+    overduesCount: 3,
+    overdueAmount: '₹3,000'
   }
 
-  function handleMarkFulfilled(orderId: string) {
-    setOrdersQueue(prev => prev.map(o => o.orderId === orderId ? { ...o, status: 'DELIVERED' } : o))
+  // --- 2. Customers & KYC State ---
+  const [customerSearch, setCustomerSearch] = useState('')
+  const [customers, setCustomers] = useState([
+    {
+      id: 'CUST-1049',
+      name: 'Priya Sundaram',
+      mobile: '+91 98201 44521',
+      email: 'priya.sundaram@gmail.com',
+      fundBalance: 5000,
+      activeAppliance: 'Whirlpool 265L Refrigerator',
+      emiDue: '₹1,000 / mo (4/12 paid)',
+      kycStatus: 'VERIFIED',
+      accountStatus: 'ACTIVE'
+    },
+    {
+      id: 'CUST-1050',
+      name: 'Rajesh Kumar Verma',
+      mobile: '+91 97112 88934',
+      email: 'rajesh.verma@techcorp.in',
+      fundBalance: 12400,
+      activeAppliance: 'Daikin 1.5T 5-Star AC',
+      emiDue: '₹3,749 / mo (1/12 paid)',
+      kycStatus: 'PENDING_REVIEW',
+      accountStatus: 'ACTIVE'
+    },
+    {
+      id: 'CUST-1051',
+      name: 'Ananya Deshmukh',
+      mobile: '+91 99304 11209',
+      email: 'ananya.d@outlook.com',
+      fundBalance: 3200,
+      activeAppliance: 'Kent Grand Plus RO',
+      emiDue: '₹1,375 / mo (8/12 paid)',
+      kycStatus: 'VERIFIED',
+      accountStatus: 'ACTIVE'
+    },
+    {
+      id: 'CUST-1052',
+      name: 'Karan Mehra',
+      mobile: '+91 98450 23112',
+      email: 'karan.m@gmail.com',
+      fundBalance: 850,
+      activeAppliance: 'None (Saving phase)',
+      emiDue: 'None',
+      kycStatus: 'REJECTED',
+      accountStatus: 'ACTIVE'
+    }
+  ])
+
+  function handleUpdateKyc(id: string, status: 'VERIFIED' | 'REJECTED') {
+    setCustomers((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, kycStatus: status } : c))
+    )
+    showToast(`KYC status for ${id} updated to ${status}!`)
   }
+
+  function handleToggleAccountFreeze(id: string) {
+    setCustomers((prev) =>
+      prev.map((c) =>
+        c.id === id
+          ? { ...c, accountStatus: c.accountStatus === 'FROZEN' ? 'ACTIVE' : 'FROZEN' }
+          : c
+      )
+    )
+    showToast(`Account status updated for ${id}.`)
+  }
+
+  // --- 3. Catalogue & Pricing State ---
+  const [catalogue, setCatalogue] = useState(productsData)
+  const [catalogueSearch, setCatalogueSearch] = useState('')
+
+  function handleToggleStock(sku: string) {
+    setCatalogue((prev) =>
+      prev.map((p) =>
+        p.sku === sku
+          ? {
+              ...p,
+              availability: p.availability.includes('Out') ? 'In Stock' : 'Out of Stock'
+            }
+          : p
+      )
+    )
+    showToast(`Stock availability toggled for item ${sku}.`)
+  }
+
+  // --- 4. Plans & Rules Engine State ---
+  const [rules, setRules] = useState({
+    dailyMin: 25,
+    weeklyMin: 100,
+    monthlyMin: 500,
+    maxDailyDebit: 2000,
+    tenuresEnabled: { 3: true, 6: true, 9: true, 12: true },
+    eligibilityMinFund: 2000,
+    withdrawalSettlementHours: 24,
+    exitFeePercent: 0
+  })
+
+  // --- 5. Collections & Reconciliation State ---
+  const [mandates, setMandates] = useState([
+    {
+      id: 'MAND-901',
+      customer: 'Priya Sundaram',
+      amount: '₹50 / day',
+      gateway: 'UPI AutoPay (Axis)',
+      status: 'ACTIVE',
+      lastDebit: 'Today, 09:00 AM',
+      reconciled: 'MATCHED'
+    },
+    {
+      id: 'MAND-902',
+      customer: 'Rajesh Kumar Verma',
+      amount: '₹350 / week',
+      gateway: 'UPI AutoPay (HDFC)',
+      status: 'ACTIVE',
+      lastDebit: '26 Oct, 09:00 AM',
+      reconciled: 'MATCHED'
+    },
+    {
+      id: 'MAND-903',
+      customer: 'Amitabh Sharma',
+      amount: '₹50 / day',
+      gateway: 'e-NACH (SBI)',
+      status: 'FAILED',
+      lastDebit: 'Today, 09:00 AM (Low Balance)',
+      reconciled: 'RETRY_SCHEDULED'
+    }
+  ])
+
+  // --- 6. EMI Book & Overdues State ---
+  const [emiBook, setEmiBook] = useState([
+    {
+      id: 'EMI-7701',
+      customer: 'Priya Sundaram',
+      item: 'Whirlpool 265L Refrigerator',
+      totalTenure: '12 Mos',
+      paidTenure: '4 Mos',
+      amountDue: 1000,
+      dueDate: '10 Nov 2026',
+      status: 'UPCOMING'
+    },
+    {
+      id: 'EMI-7702',
+      customer: 'Suresh Narayanan',
+      item: 'Daikin 1.5T 5-Star AC',
+      totalTenure: '9 Mos',
+      paidTenure: '6 Mos',
+      amountDue: 3749,
+      dueDate: '25 Oct 2026',
+      status: 'OVERDUE'
+    },
+    {
+      id: 'EMI-7703',
+      customer: 'Rohit Batra',
+      item: 'Sony Bravia 55" 4K TV',
+      totalTenure: '12 Mos',
+      paidTenure: '12 Mos',
+      amountDue: 0,
+      dueDate: 'Completed',
+      status: 'CLEARED'
+    }
+  ])
+
+  // --- 7. Orders & Fulfilment State ---
+  const [orders, setOrders] = useState([
+    {
+      orderId: 'ORD-9021',
+      customer: 'Priya Sundaram',
+      appliance: 'Whirlpool 265L Double-Door Refrigerator',
+      vendor: 'Croma Megastore Lower Parel',
+      status: 'DELIVERED',
+      orderDate: '15 Jul 2026'
+    },
+    {
+      orderId: 'ORD-9022',
+      customer: 'Rajesh Kumar Verma',
+      appliance: 'Daikin 1.5 Ton Inverter AC',
+      vendor: 'Tata CLiQ Logistics Depot',
+      status: 'DISPATCHED',
+      orderDate: '26 Oct 2026'
+    },
+    {
+      orderId: 'ORD-9023',
+      customer: 'Ananya Deshmukh',
+      appliance: 'Kent Grand Plus RO Water Purifier',
+      vendor: 'Reliance Digital Connaught Place',
+      status: 'PROCESSING',
+      orderDate: '27 Oct 2026'
+    }
+  ])
+
+  function handleUpdateOrderStatus(orderId: string, newStatus: string) {
+    setOrders((prev) =>
+      prev.map((o) => (o.orderId === orderId ? { ...o, status: newStatus } : o))
+    )
+    showToast(`Order ${orderId} updated to ${newStatus}.`)
+  }
+
+  // --- 8. Withdrawals & Refunds State ---
+  const [withdrawals, setWithdrawals] = useState([
+    {
+      id: 'WDR-4401',
+      customer: 'Sunil Joshi',
+      amount: 4500,
+      accountNumber: '••••••••8819 (HDFC Bank)',
+      makerStatus: 'VERIFIED',
+      checkerStatus: 'PENDING_APPROVAL',
+      date: '27 Oct 2026, 10:15 AM'
+    },
+    {
+      id: 'WDR-4402',
+      customer: 'Meenakshi Iyer',
+      amount: 1200,
+      accountNumber: '••••••••2340 (ICICI Bank)',
+      makerStatus: 'PENDING_VERIFY',
+      checkerStatus: 'WAITING_MAKER',
+      date: '27 Oct 2026, 09:30 AM'
+    }
+  ])
+
+  function handleMakerApprove(id: string) {
+    setWithdrawals((prev) =>
+      prev.map((w) =>
+        w.id === id ? { ...w, makerStatus: 'VERIFIED', checkerStatus: 'PENDING_APPROVAL' } : w
+      )
+    )
+    showToast(`Maker approved withdrawal ${id}. Awaiting Checker second sign-off.`)
+  }
+
+  function handleCheckerConfirm(id: string) {
+    setWithdrawals((prev) =>
+      prev.map((w) =>
+        w.id === id ? { ...w, checkerStatus: 'APPROVED_AND_SETTLED' } : w
+      )
+    )
+    showToast(`Checker authorized payout for ${id}! Bank IMPS transfer initiated.`)
+  }
+
+  // --- 9. Content & Announcements State ---
+  const [announcementChannel, setAnnouncementChannel] = useState<'push' | 'sms' | 'whatsapp'>('whatsapp')
+  const [announcementText, setAnnouncementText] = useState(
+    'Festive Diwali 0% EMI unlocked! Use your savings fund on refrigerators & ACs with zero processing fee.'
+  )
+
+  // --- 11. Audit Logs State ---
+  const [auditLogs, setAuditLogs] = useState([
+    {
+      id: 'AUD-8891',
+      user: 'Super Admin (admin@lakshmi.com)',
+      action: 'Rule Modification',
+      detail: 'Adjusted daily auto-save minimum threshold to ₹25',
+      time: '12 mins ago',
+      ip: '103.21.144.10'
+    },
+    {
+      id: 'AUD-8890',
+      user: 'Maker (vikram.m@lakshmi.in)',
+      action: 'Withdrawal Maker Sign-off',
+      detail: 'Approved principal release ₹4,500 for CUST-1042',
+      time: '45 mins ago',
+      ip: '103.21.144.18'
+    },
+    {
+      id: 'AUD-8889',
+      user: 'System Reconciler',
+      action: 'Daily Gateway Recon',
+      detail: 'Reconciled 1,248 UPI AutoPay collections against Axis escrow',
+      time: '2 hours ago',
+      ip: '10.0.4.1'
+    }
+  ])
+
+  // Navigation Items for the 11 Modules in Image 6
+  const navModules = [
+    { id: 'business', label: 'Business Dashboard', icon: <BarChart3 className="h-4 w-4" /> },
+    { id: 'customers', label: 'Customer & KYC', icon: <Users className="h-4 w-4" /> },
+    { id: 'catalogue', label: 'Catalogue & Pricing', icon: <Package className="h-4 w-4" /> },
+    { id: 'plans', label: 'Plans & Rules', icon: <Sliders className="h-4 w-4" /> },
+    { id: 'collections', label: 'Collections & Recon', icon: <RefreshCw className="h-4 w-4" /> },
+    { id: 'emi-book', label: 'EMI Book & Overdues', icon: <CreditCard className="h-4 w-4" /> },
+    { id: 'orders', label: 'Orders & Fulfilment', icon: <Truck className="h-4 w-4" /> },
+    { id: 'withdrawals', label: 'Withdrawals & Refunds', icon: <ArrowDownLeft className="h-4 w-4" /> },
+    { id: 'content', label: 'Content & Announcements', icon: <Megaphone className="h-4 w-4" /> },
+    { id: 'reports', label: 'Reports & Exports', icon: <FileSpreadsheet className="h-4 w-4" /> },
+    { id: 'audit', label: 'Roles & Audit Log', icon: <ShieldAlert className="h-4 w-4" /> }
+  ]
 
   return (
-    <div className="min-h-screen bg-[#0B0F19] text-slate-100 py-10 radial-mesh">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#0B0F19] text-slate-100 py-8 radial-mesh">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-6">
         
-        {/* Top Header Bar */}
+        {/* Toast Alert */}
+        {toastMessage && (
+          <div className="fixed top-20 right-6 z-50 flex items-center gap-2 rounded-2xl bg-emerald-500 text-black px-4 py-3 font-bold text-xs shadow-2xl animate-bounce">
+            <Check className="h-4 w-4" />
+            <span>{toastMessage}</span>
+          </div>
+        )}
+
+        {/* Top Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-white/10 pb-6">
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3.5 py-1 text-xs font-semibold text-indigo-400 mb-2">
               <ShieldCheck className="h-3.5 w-3.5" />
-              <span>Institutional Governance &amp; Administration</span>
+              <span>Admin &amp; Operations Console · Line Item 2</span>
             </div>
             <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-              FinTech Command Center
+              Operations Control Room
             </h1>
             <p className="mt-1 text-xs text-slate-400">
-              Escrow liquidity monitoring, KYC verification queues, partner fulfillment, and compliance audit records.
+              Your team’s command center to run auto-save collections, KYC, catalogue, EMI book, and reconciliation every day.
             </p>
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="inline-flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-2 text-xs font-semibold text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+            <span className="inline-flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-2 text-xs font-semibold text-emerald-400">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
               </span>
-              <span>MongoDB Atlas Connected</span>
+              <span>Single Core Engine Active</span>
             </span>
+
             <button
-              onClick={() => window.location.reload()}
-              className="flex items-center gap-1.5 rounded-xl border border-white/10 bg-[#131B2E] px-3.5 py-2 text-xs font-medium text-slate-300 hover:text-white hover:border-white/20 transition cursor-pointer"
+              onClick={() => showToast('Syncing real-time database ledgers & gateway webhooks...')}
+              className="flex items-center gap-1.5 rounded-xl border border-white/10 bg-[#131B2E] px-3.5 py-2 text-xs font-medium text-slate-300 hover:text-white cursor-pointer"
             >
               <RefreshCw className="h-3.5 w-3.5" />
-              <span>Refresh Metrics</span>
+              <span>Reconcile Now</span>
             </button>
           </div>
         </div>
 
-        {/* Executive Metric Cards */}
-        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="glass-card rounded-2xl border border-white/10 p-5 shadow-xl">
-            <div className="flex items-center justify-between text-slate-400 text-xs">
-              <span className="font-semibold uppercase tracking-wider">Gross Portfolio Value</span>
-              <TrendingUp className="h-4 w-4 text-emerald-400" />
-            </div>
-            <div className="mt-3 flex items-baseline gap-2">
-              <span className="text-3xl font-extrabold text-white">₹4.82 Cr</span>
-              <span className="text-xs text-emerald-400 font-semibold">+18.4%</span>
-            </div>
-            <p className="mt-1 text-[11px] text-slate-400">1,482 active milestone subscriptions</p>
-          </div>
-
-          <div className="glass-card rounded-2xl border border-white/10 p-5 shadow-xl">
-            <div className="flex items-center justify-between text-slate-400 text-xs">
-              <span className="font-semibold uppercase tracking-wider">Escrow Trustee Reserve</span>
-              <Building2 className="h-4 w-4 text-indigo-400" />
-            </div>
-            <div className="mt-3 flex items-baseline gap-2">
-              <span className="text-3xl font-extrabold text-indigo-300">₹3.15 Cr</span>
-              <span className="text-xs text-slate-400 font-medium">Axis Trustee</span>
-            </div>
-            <p className="mt-1 text-[11px] text-slate-400">100% RBI Escrow Backed</p>
-          </div>
-
-          <div className="glass-card rounded-2xl border border-white/10 p-5 shadow-xl">
-            <div className="flex items-center justify-between text-slate-400 text-xs">
-              <span className="font-semibold uppercase tracking-wider">Pending KYC Queue</span>
-              <Users className="h-4 w-4 text-amber-400" />
-            </div>
-            <div className="mt-3 flex items-baseline gap-2">
-              <span className="text-3xl font-extrabold text-amber-300">
-                {kycQueue.filter(k => k.status === 'PENDING').length}
-              </span>
-              <span className="text-xs text-amber-400 font-medium">Needs Verification</span>
-            </div>
-            <p className="mt-1 text-[11px] text-slate-400">Avg. verification time: 24 mins</p>
-          </div>
-
-          <div className="glass-card rounded-2xl border border-white/10 p-5 shadow-xl">
-            <div className="flex items-center justify-between text-slate-400 text-xs">
-              <span className="font-semibold uppercase tracking-wider">Ready for Fulfillment</span>
-              <Package className="h-4 w-4 text-emerald-400" />
-            </div>
-            <div className="mt-3 flex items-baseline gap-2">
-              <span className="text-3xl font-extrabold text-emerald-400">
-                {ordersQueue.filter(o => o.status === 'READY_FOR_PICKUP').length}
-              </span>
-              <span className="text-xs text-emerald-400 font-medium">100% Cleared</span>
-            </div>
-            <p className="mt-1 text-[11px] text-slate-400">Croma &amp; Tanishq Boutiques</p>
-          </div>
-        </div>
-
-        {/* Tab Navigation */}
-        <div className="mt-10 flex border-b border-white/10 gap-2">
-          {[
-            { id: 'overview', label: 'Overview & Collections', icon: Layers },
-            { id: 'kyc', label: `KYC Approvals (${kycQueue.filter(k => k.status === 'PENDING').length})`, icon: Users },
-            { id: 'orders', label: 'Fulfillment & Dispatches', icon: Package },
-            { id: 'logs', label: 'Regulatory Audit Trail', icon: FileText }
-          ].map(tab => (
+        {/* 11 Modules Horizontal Navigation Bar */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-none border-b border-white/5">
+          {navModules.map((mod) => (
             <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
-              className={`flex items-center gap-2 px-5 py-3 text-xs font-bold uppercase tracking-wider transition-all border-b-2 cursor-pointer ${
-                activeTab === tab.id
-                  ? 'border-indigo-500 text-indigo-400 bg-indigo-500/10 rounded-t-xl'
-                  : 'border-transparent text-slate-400 hover:text-slate-200'
+              key={mod.id}
+              onClick={() => setActiveModule(mod.id as any)}
+              className={`flex items-center gap-2 whitespace-nowrap rounded-xl px-3.5 py-2.5 text-xs font-bold transition cursor-pointer ${
+                activeModule === mod.id
+                  ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-lg shadow-indigo-500/30'
+                  : 'bg-[#131B2E]/60 text-slate-400 hover:text-white hover:bg-white/5'
               }`}
             >
-              <tab.icon className="h-4 w-4" />
-              <span>{tab.label}</span>
+              {mod.icon}
+              <span>{mod.label}</span>
             </button>
           ))}
         </div>
 
-        {/* TAB CONTENT 1: OVERVIEW & COLLECTION SUMMARY */}
-        {activeTab === 'overview' && (
-          <div className="mt-6 space-y-6">
-            <div className="grid gap-6 lg:grid-cols-3">
-              {/* Left 2 Cols: Monthly Inflows & Collection Matrix */}
-              <div className="lg:col-span-2 glass-card rounded-2xl border border-white/10 p-6 shadow-xl">
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <h2 className="text-base font-bold text-white">Milestone Inflow Breakdown</h2>
-                    <p className="text-xs text-slate-400">Monthly recurring dues distribution by hardware asset class</p>
-                  </div>
-                  <span className="text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20">
-                    99.2% Collection Rate
+        {/* MODULE 1: BUSINESS DASHBOARD (Matches Image 6 Mini-Mockup) */}
+        {activeModule === 'business' && (
+          <div className="space-y-6">
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-[#1E293B] to-[#0F172A] p-5 shadow-xl">
+                <span className="text-xs font-bold uppercase tracking-wider text-indigo-300 block">
+                  Total Fund Balance
+                </span>
+                <div className="mt-2 text-3xl font-extrabold text-white">
+                  {businessKpis.totalFundBalance}
+                </div>
+                <p className="mt-1 text-[11px] text-emerald-400 font-medium">
+                  +18.2% MoM growth in savings fund
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-white/10 bg-[#131B2E] p-5 shadow-xl">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block">
+                  Active Auto-Savers
+                </span>
+                <div className="mt-2 text-3xl font-extrabold text-emerald-400">
+                  {businessKpis.activeSavers}
+                </div>
+                <p className="mt-1 text-[11px] text-slate-400">
+                  UPI AutoPay active mandates across India
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-white/10 bg-[#131B2E] p-5 shadow-xl">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block">
+                  Appliance Orders
+                </span>
+                <div className="mt-2 text-3xl font-extrabold text-amber-400">
+                  {businessKpis.orders}
+                </div>
+                <p className="mt-1 text-[11px] text-slate-400">
+                  Fund applied + balance on 0% EMI
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-white/10 bg-[#131B2E] p-5 shadow-xl">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block">
+                  Active EMI Book &amp; Overdues
+                </span>
+                <div className="mt-2 text-3xl font-extrabold text-indigo-300">
+                  {businessKpis.emiBookValue}
+                </div>
+                <p className="mt-1 text-[11px] text-rose-400 font-bold">
+                  {businessKpis.overduesCount} overdue accounts ({businessKpis.overdueAmount})
+                </p>
+              </div>
+            </div>
+
+            {/* Illustrative Admin Console Chart from Proposal */}
+            <div className="glass-card rounded-3xl border border-white/10 p-6 shadow-2xl space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-white/10 pb-4">
+                <div>
+                  <h3 className="text-base font-bold text-white flex items-center gap-2">
+                    <BarChart3 className="h-4 w-4 text-indigo-400" />
+                    Consolidated Collections Trend &amp; Growth Curve
+                  </h3>
+                  <span className="text-xs text-slate-400">
+                    Live mirror of <code className="text-indigo-300">admin.yourbrand.in/dashboard</code>
                   </span>
                 </div>
-
-                <div className="space-y-4 mt-6">
-                  {[
-                    { label: 'Smartphones (Apple iPhone 16 & Samsung S24)', amount: '₹1.84 Cr', pct: '48%', color: 'bg-indigo-500' },
-                    { label: 'Home Appliances (LG AI Washers & Daikin Split AC)', amount: '₹1.15 Cr', pct: '30%', color: 'bg-emerald-500' },
-                    { label: 'Sovereign Bullion (Tanishq 24K Gold Coins)', amount: '₹98.5 Lakh', pct: '26%', color: 'bg-amber-400' },
-                    { label: 'Smart TVs & Audio (Sony Bravia 55" 4K)', amount: '₹84.5 Lakh', pct: '22%', color: 'bg-cyan-400' }
-                  ].map((row, i) => (
-                    <div key={i} className="space-y-1.5">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="text-slate-300 font-medium">{row.label}</span>
-                        <span className="text-white font-bold">{row.amount}</span>
-                      </div>
-                      <div className="h-2 w-full rounded-full bg-[#0B0F19]">
-                        <div className={`h-2 rounded-full ${row.color}`} style={{ width: row.pct }} />
-                      </div>
-                    </div>
-                  ))}
+                <div className="flex gap-2">
+                  <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-bold text-emerald-400 border border-emerald-500/20">
+                    99.8% Gateway Recon Rate
+                  </span>
                 </div>
               </div>
 
-              {/* Right 1 Col: Partner Sourcing Hub */}
-              <div className="glass-card rounded-2xl border border-white/10 p-6 shadow-xl space-y-4">
-                <h2 className="text-base font-bold text-white">Authorized Partner SLAs</h2>
-                <p className="text-xs text-slate-400">Real-time stock reservation and store pickup dispatch performance</p>
-
-                <div className="space-y-3 mt-4">
-                  {[
-                    { partner: 'Croma (Tata)', role: 'Apple & Electronics', status: 'Optimal (99.8%)', code: 'CRM-BLR-01' },
-                    { partner: 'Reliance Digital', role: 'Samsung & LG AI', status: 'Optimal (99.4%)', code: 'REL-MUM-04' },
-                    { partner: 'Tanishq Boutiques', role: '24K Gold Vaulting', status: '100% Audited', code: 'TAN-DEL-02' },
-                    { partner: 'Daikin Solution Hub', role: 'HVAC Direct Factory', status: 'Optimal (98.9%)', code: 'DKN-HYD-01' }
-                  ].map((p, idx) => (
-                    <div key={idx} className="rounded-xl border border-white/5 bg-[#0B0F19]/60 p-3 text-xs">
-                      <div className="flex items-center justify-between font-semibold text-white">
-                        <span>{p.partner}</span>
-                        <span className="text-[10px] text-emerald-400 font-mono">{p.status}</span>
-                      </div>
-                      <div className="mt-1 flex items-center justify-between text-slate-400 text-[11px]">
-                        <span>{p.role}</span>
-                        <span className="font-mono text-slate-500">{p.code}</span>
-                      </div>
-                    </div>
-                  ))}
+              {/* Vector Trendline SVG mimicking image */}
+              <div className="relative h-48 w-full overflow-hidden rounded-2xl bg-[#0B0F19] p-4 flex items-end">
+                <svg className="w-full h-36" viewBox="0 0 500 120" fill="none" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#6366F1" stopOpacity="0.4" />
+                      <stop offset="100%" stopColor="#6366F1" stopOpacity="0.0" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M0 100 Q 80 80, 160 85 T 300 40 T 420 30 T 500 10 L 500 120 L 0 120 Z"
+                    fill="url(#chartGradient)"
+                  />
+                  <path
+                    d="M0 100 Q 80 80, 160 85 T 300 40 T 420 30 T 500 10"
+                    stroke="#6366F1"
+                    strokeWidth="3"
+                    fill="none"
+                  />
+                </svg>
+                <div className="absolute top-4 left-4 text-xs font-mono text-slate-400">
+                  Monthly Collections Momentum
                 </div>
               </div>
             </div>
           </div>
         )}
 
-        {/* TAB CONTENT 2: KYC APPROVAL QUEUE */}
-        {activeTab === 'kyc' && (
-          <div className="mt-6 glass-card rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
-            <div className="p-5 border-b border-white/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        {/* MODULE 2: CUSTOMER & KYC */}
+        {activeModule === 'customers' && (
+          <div className="glass-card rounded-2xl border border-white/10 p-6 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h2 className="text-base font-bold text-white">Member Onboarding &amp; KYC Verification</h2>
-                <p className="text-xs text-slate-400">Validate applicant identity documents and approve enrollment in milestone plans</p>
+                <h3 className="text-base font-bold text-white flex items-center gap-2">
+                  <Users className="h-4 w-4 text-emerald-400" />
+                  Customer Accounts &amp; KYC Verification
+                </h3>
+                <p className="text-xs text-slate-400">Search customers, review KYC, freeze or close accounts</p>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
-                  <input
-                    type="text"
-                    placeholder="Filter by applicant or ID..."
-                    value={searchFilter}
-                    onChange={e => setSearchFilter(e.target.value)}
-                    className="rounded-xl border border-white/10 bg-[#0B0F19] pl-9 pr-3 py-1.5 text-xs text-white placeholder-slate-500 outline-none focus:border-indigo-500"
-                  />
-                </div>
+
+              <div className="relative min-w-[240px]">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="Search name, mobile, email..."
+                  value={customerSearch}
+                  onChange={(e) => setCustomerSearch(e.target.value)}
+                  className="w-full rounded-xl border border-white/10 bg-[#0B0F19] pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 outline-none focus:border-indigo-500"
+                />
               </div>
             </div>
 
@@ -327,67 +541,76 @@ export default function AdminDashboard() {
               <table className="w-full text-left text-xs">
                 <thead className="bg-[#0B0F19]/80 text-slate-400 uppercase tracking-wider text-[10px] border-b border-white/10">
                   <tr>
-                    <th className="py-3 px-4">Applicant ID</th>
-                    <th className="py-3 px-4">Member Name</th>
-                    <th className="py-3 px-4">Subscribed Asset</th>
-                    <th className="py-3 px-4">Document Proof</th>
-                    <th className="py-3 px-4">Monthly Dues</th>
-                    <th className="py-3 px-4">Status</th>
-                    <th className="py-3 px-4 text-right">Actions</th>
+                    <th className="py-3 px-4">Customer ID &amp; Name</th>
+                    <th className="py-3 px-4">Contact</th>
+                    <th className="py-3 px-4">Fund Balance</th>
+                    <th className="py-3 px-4">Active Appliance &amp; EMI</th>
+                    <th className="py-3 px-4">KYC Review</th>
+                    <th className="py-3 px-4 text-right">Account Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
-                  {kycQueue
-                    .filter(k => k.name.toLowerCase().includes(searchFilter.toLowerCase()) || k.id.toLowerCase().includes(searchFilter.toLowerCase()))
-                    .map((item) => (
-                      <tr key={item.id} className="hover:bg-white/[0.02] transition">
-                        <td className="py-4 px-4 font-mono text-indigo-300 font-semibold">{item.id}</td>
-                        <td className="py-4 px-4">
-                          <p className="font-bold text-white">{item.name}</p>
-                          <p className="text-[11px] text-slate-400">{item.email} · {item.mobile}</p>
+                  {customers
+                    .filter(
+                      (c) =>
+                        c.name.toLowerCase().includes(customerSearch.toLowerCase()) ||
+                        c.email.toLowerCase().includes(customerSearch.toLowerCase()) ||
+                        c.id.toLowerCase().includes(customerSearch.toLowerCase())
+                    )
+                    .map((c) => (
+                      <tr key={c.id} className="hover:bg-white/[0.02]">
+                        <td className="py-3.5 px-4">
+                          <div className="font-bold text-white">{c.name}</div>
+                          <div className="text-[10px] font-mono text-indigo-300">{c.id}</div>
                         </td>
-                        <td className="py-4 px-4">
-                          <p className="text-slate-200 font-medium">{item.item}</p>
-                          <p className="text-[11px] text-indigo-400">{item.plan}</p>
+                        <td className="py-3.5 px-4 text-slate-300">
+                          <div>{c.mobile}</div>
+                          <div className="text-[10px] text-slate-400">{c.email}</div>
                         </td>
-                        <td className="py-4 px-4">
-                          <span className="rounded-lg bg-white/5 px-2.5 py-1 text-[11px] text-slate-300 border border-white/5 font-medium">
-                            {item.idType}
-                          </span>
+                        <td className="py-3.5 px-4 font-bold text-amber-400">
+                          ₹{c.fundBalance.toLocaleString('en-IN')}
                         </td>
-                        <td className="py-4 px-4 font-extrabold text-emerald-400">{item.amount}</td>
-                        <td className="py-4 px-4">
-                          <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${
-                            item.status === 'VERIFIED'
-                              ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
-                              : item.status === 'REJECTED'
-                              ? 'bg-rose-500/10 text-rose-400 border-rose-500/30'
-                              : 'bg-amber-500/10 text-amber-300 border-amber-500/30'
-                          }`}>
-                            {item.status}
-                          </span>
+                        <td className="py-3.5 px-4">
+                          <div className="text-white font-medium">{c.activeAppliance}</div>
+                          <div className="text-[10px] text-emerald-400">{c.emiDue}</div>
                         </td>
-                        <td className="py-4 px-4 text-right space-x-2">
-                          {item.status === 'PENDING' ? (
-                            <>
+                        <td className="py-3.5 px-4">
+                          {c.kycStatus === 'VERIFIED' ? (
+                            <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-400 border border-emerald-500/30">
+                              ✓ Verified
+                            </span>
+                          ) : c.kycStatus === 'PENDING_REVIEW' ? (
+                            <div className="flex gap-1.5">
                               <button
-                                onClick={() => handleApproveKyc(item.id)}
-                                className="inline-flex items-center gap-1 rounded-lg bg-emerald-600 px-3 py-1.5 text-[11px] font-bold text-white hover:bg-emerald-500 transition shadow-[0_0_10px_rgba(16,185,129,0.3)] cursor-pointer"
+                                onClick={() => handleUpdateKyc(c.id, 'VERIFIED')}
+                                className="rounded bg-emerald-500 px-2 py-0.5 text-[10px] font-bold text-black"
                               >
-                                <Check className="h-3 w-3" />
-                                <span>Approve</span>
+                                Approve
                               </button>
                               <button
-                                onClick={() => handleRejectKyc(item.id)}
-                                className="inline-flex items-center gap-1 rounded-lg bg-rose-600/80 px-2.5 py-1.5 text-[11px] font-bold text-white hover:bg-rose-500 transition cursor-pointer"
+                                onClick={() => handleUpdateKyc(c.id, 'REJECTED')}
+                                className="rounded bg-rose-500/20 px-2 py-0.5 text-[10px] font-bold text-rose-300 border border-rose-500/30"
                               >
-                                <X className="h-3 w-3" />
-                                <span>Reject</span>
+                                Reject
                               </button>
-                            </>
+                            </div>
                           ) : (
-                            <span className="text-slate-500 text-[11px]">Audit Stamped</span>
+                            <span className="rounded-full bg-rose-500/10 px-2 py-0.5 text-[10px] font-bold text-rose-400 border border-rose-500/30">
+                              ✕ Rejected
+                            </span>
                           )}
+                        </td>
+                        <td className="py-3.5 px-4 text-right">
+                          <button
+                            onClick={() => handleToggleAccountFreeze(c.id)}
+                            className={`rounded-lg px-2.5 py-1 text-[11px] font-semibold border ${
+                              c.accountStatus === 'FROZEN'
+                                ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                                : 'bg-white/5 text-slate-300 border-white/10 hover:text-white'
+                            }`}
+                          >
+                            {c.accountStatus === 'FROZEN' ? 'Unfreeze' : 'Freeze'}
+                          </button>
                         </td>
                       </tr>
                     ))}
@@ -397,61 +620,223 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* TAB CONTENT 3: FULFILLMENT & DISPATCHES */}
-        {activeTab === 'orders' && (
-          <div className="mt-6 glass-card rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
-            <div className="p-5 border-b border-white/10">
-              <h2 className="text-base font-bold text-white">Hardware Release &amp; Partner Store Pickup Registry</h2>
-              <p className="text-xs text-slate-400">Authorize manufacturer warrantied dispatch once 100% of tenure milestones are cleared</p>
+        {/* MODULE 3: CATALOGUE & PRICING */}
+        {activeModule === 'catalogue' && (
+          <div className="glass-card rounded-2xl border border-white/10 p-6 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h3 className="text-base font-bold text-white flex items-center gap-2">
+                  <Package className="h-4 w-4 text-indigo-400" />
+                  Appliance Catalogue &amp; Pricing Management
+                </h3>
+                <p className="text-xs text-slate-400">Add and edit appliances, prices, stock status, and brand details</p>
+              </div>
+
+              <button
+                onClick={() => showToast('Opening Add New Appliance Form...')}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-indigo-600 px-3.5 py-2 text-xs font-bold text-white hover:bg-indigo-500"
+              >
+                <Plus className="h-3.5 w-3.5" />
+                <span>Add Appliance</span>
+              </button>
             </div>
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead className="bg-[#0B0F19]/80 text-slate-400 uppercase tracking-wider text-[10px] border-b border-white/10">
                   <tr>
-                    <th className="py-3 px-4">Order ID</th>
-                    <th className="py-3 px-4">Member Name</th>
-                    <th className="py-3 px-4">Brand Asset</th>
-                    <th className="py-3 px-4">Milestone Clearance</th>
-                    <th className="py-3 px-4">Pickup / Logistics Partner</th>
-                    <th className="py-3 px-4">Status</th>
-                    <th className="py-3 px-4 text-right">Action</th>
+                    <th className="py-3 px-4">Appliance</th>
+                    <th className="py-3 px-4">Brand &amp; Category</th>
+                    <th className="py-3 px-4">Catalogue Price</th>
+                    <th className="py-3 px-4">12-Mo 0% EMI</th>
+                    <th className="py-3 px-4">Stock Status</th>
+                    <th className="py-3 px-4 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
-                  {ordersQueue.map((order) => (
-                    <tr key={order.orderId} className="hover:bg-white/[0.02] transition">
-                      <td className="py-4 px-4 font-mono text-indigo-300 font-semibold">{order.orderId}</td>
-                      <td className="py-4 px-4 font-bold text-white">{order.member}</td>
-                      <td className="py-4 px-4 text-slate-200">
-                        <span className="font-semibold text-white">{order.brand}:</span> {order.product}
+                  {catalogue.map((p) => (
+                    <tr key={p.sku} className="hover:bg-white/[0.02]">
+                      <td className="py-3 px-4 font-bold text-white flex items-center gap-2">
+                        <img src={p.image} alt={p.name} className="h-8 w-8 rounded object-cover" />
+                        <span className="truncate max-w-xs">{p.name}</span>
                       </td>
-                      <td className="py-4 px-4 text-emerald-400 font-bold">{order.tenure}</td>
-                      <td className="py-4 px-4 text-slate-300">
-                        <p className="font-medium text-white">{order.partner}</p>
-                        <p className="text-[11px] text-slate-400">{order.method}</p>
-                      </td>
-                      <td className="py-4 px-4">
-                        <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${
-                          order.status === 'DELIVERED'
-                            ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
-                            : 'bg-indigo-500/10 text-indigo-300 border-indigo-500/30'
-                        }`}>
-                          {order.status}
+                      <td className="py-3 px-4 text-slate-300">{p.brand} · {p.category}</td>
+                      <td className="py-3 px-4 font-bold text-white">{p.formattedPrice}</td>
+                      <td className="py-3 px-4 text-emerald-400 font-semibold">₹{p.monthlyEmi12}/mo</td>
+                      <td className="py-3 px-4">
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-[10px] font-bold border ${
+                            p.availability.includes('In Stock')
+                              ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                              : 'bg-rose-500/10 text-rose-400 border-rose-500/30'
+                          }`}
+                        >
+                          {p.availability}
                         </span>
                       </td>
-                      <td className="py-4 px-4 text-right">
-                        {order.status !== 'DELIVERED' ? (
-                          <button
-                            onClick={() => handleMarkFulfilled(order.orderId)}
-                            className="inline-flex items-center gap-1 rounded-lg bg-indigo-600 px-3 py-1.5 text-[11px] font-bold text-white hover:bg-indigo-500 transition shadow-[0_0_15px_rgba(99,102,241,0.3)] cursor-pointer"
-                          >
-                            <Package className="h-3 w-3" />
-                            <span>Mark Delivered</span>
-                          </button>
+                      <td className="py-3 px-4 text-right">
+                        <button
+                          onClick={() => handleToggleStock(p.sku)}
+                          className="rounded-lg bg-white/5 px-2.5 py-1 text-[11px] font-semibold text-slate-300 hover:text-white border border-white/10"
+                        >
+                          Toggle Stock
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* MODULE 4: PLANS & RULES */}
+        {activeModule === 'plans' && (
+          <div className="glass-card rounded-2xl border border-white/10 p-6 space-y-6">
+            <div>
+              <h3 className="text-base font-bold text-white flex items-center gap-2">
+                <Sliders className="h-4 w-4 text-amber-400" />
+                Plans &amp; Rules Configuration (Zero-Code Rule Engine)
+              </h3>
+              <p className="text-xs text-slate-400">
+                Set auto-save minimums, frequencies, EMI tenures, eligibility, and withdrawal policy — no code changes.
+              </p>
+            </div>
+
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="rounded-2xl bg-[#0B0F19] p-5 border border-white/5 space-y-3">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-300 block">
+                  Mandate Thresholds
+                </span>
+                <div>
+                  <label className="text-[11px] text-slate-400 block mb-1">Daily Minimum Debit (₹)</label>
+                  <input
+                    type="number"
+                    value={rules.dailyMin}
+                    onChange={(e) => setRules({ ...rules, dailyMin: Number(e.target.value) })}
+                    className="w-full rounded-xl border border-white/10 bg-[#131B2E] px-3 py-2 text-xs text-white"
+                  />
+                </div>
+                <div>
+                  <label className="text-[11px] text-slate-400 block mb-1">Weekly Minimum Debit (₹)</label>
+                  <input
+                    type="number"
+                    value={rules.weeklyMin}
+                    onChange={(e) => setRules({ ...rules, weeklyMin: Number(e.target.value) })}
+                    className="w-full rounded-xl border border-white/10 bg-[#131B2E] px-3 py-2 text-xs text-white"
+                  />
+                </div>
+              </div>
+
+              <div className="rounded-2xl bg-[#0B0F19] p-5 border border-white/5 space-y-3">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-300 block">
+                  0% EMI Tenures Enabled
+                </span>
+                <div className="space-y-2 text-xs">
+                  {[3, 6, 9, 12].map((m) => (
+                    <label key={m} className="flex items-center gap-2 text-slate-200 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={rules.tenuresEnabled[m as 3 | 6 | 9 | 12]}
+                        onChange={() => {
+                          const current = rules.tenuresEnabled[m as 3 | 6 | 9 | 12]
+                          setRules({
+                            ...rules,
+                            tenuresEnabled: { ...rules.tenuresEnabled, [m]: !current }
+                          })
+                        }}
+                        className="rounded accent-emerald-500"
+                      />
+                      <span>{m} Months Tenure (0% Interest)</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-2xl bg-[#0B0F19] p-5 border border-white/5 space-y-3">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-300 block">
+                  Withdrawal &amp; Eligibility Policy
+                </span>
+                <div>
+                  <label className="text-[11px] text-slate-400 block mb-1">Eligibility Minimum Fund (₹)</label>
+                  <input
+                    type="number"
+                    value={rules.eligibilityMinFund}
+                    onChange={(e) => setRules({ ...rules, eligibilityMinFund: Number(e.target.value) })}
+                    className="w-full rounded-xl border border-white/10 bg-[#131B2E] px-3 py-2 text-xs text-white"
+                  />
+                </div>
+                <div>
+                  <label className="text-[11px] text-slate-400 block mb-1">Settlement Turnaround (Hours)</label>
+                  <input
+                    type="number"
+                    value={rules.withdrawalSettlementHours}
+                    onChange={(e) => setRules({ ...rules, withdrawalSettlementHours: Number(e.target.value) })}
+                    className="w-full rounded-xl border border-white/10 bg-[#131B2E] px-3 py-2 text-xs text-white"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={() => showToast('Rules policy saved and deployed across shared core platform!')}
+              className="rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-3 text-xs font-bold text-black"
+            >
+              Save &amp; Deploy Rule Changes
+            </button>
+          </div>
+        )}
+
+        {/* MODULE 5: COLLECTIONS & RECONCILIATION */}
+        {activeModule === 'collections' && (
+          <div className="glass-card rounded-2xl border border-white/10 p-6 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h3 className="text-base font-bold text-white flex items-center gap-2">
+                  <RefreshCw className="h-4 w-4 text-cyan-400" />
+                  Collections &amp; Payment Gateway Reconciliation
+                </h3>
+                <p className="text-xs text-slate-400">
+                  Auto-save &amp; EMI mandate status, failed debits, retries and daily matching with gateway settlements
+                </p>
+              </div>
+
+              <button
+                onClick={() => showToast('Automated retry triggered for failed mandate debits!')}
+                className="rounded-xl bg-white/5 border border-white/10 px-3.5 py-2 text-xs font-bold text-slate-200 hover:text-white"
+              >
+                Trigger Failed Retries
+              </button>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-[#0B0F19]/80 text-slate-400 uppercase tracking-wider text-[10px] border-b border-white/10">
+                  <tr>
+                    <th className="py-3 px-4">Mandate ID</th>
+                    <th className="py-3 px-4">Customer</th>
+                    <th className="py-3 px-4">Amount &amp; Frequency</th>
+                    <th className="py-3 px-4">Gateway Mandate</th>
+                    <th className="py-3 px-4">Last Debit Run</th>
+                    <th className="py-3 px-4">Reconciliation</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  {mandates.map((m) => (
+                    <tr key={m.id} className="hover:bg-white/[0.02]">
+                      <td className="py-3 px-4 font-mono font-bold text-indigo-300">{m.id}</td>
+                      <td className="py-3 px-4 text-white font-medium">{m.customer}</td>
+                      <td className="py-3 px-4 font-bold text-amber-400">{m.amount}</td>
+                      <td className="py-3 px-4 text-slate-300">{m.gateway}</td>
+                      <td className="py-3 px-4 text-slate-400">{m.lastDebit}</td>
+                      <td className="py-3 px-4">
+                        {m.reconciled === 'MATCHED' ? (
+                          <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-400 border border-emerald-500/30">
+                            ✓ Matched (₹0 Discrepancy)
+                          </span>
                         ) : (
-                          <span className="text-emerald-400 font-semibold text-[11px] flex items-center justify-end gap-1">
-                            <CheckCircle2 className="h-3.5 w-3.5" /> Fulfilled
+                          <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold text-amber-400 border border-amber-500/30">
+                            Retry Scheduled (No Bounces)
                           </span>
                         )}
                       </td>
@@ -463,41 +848,381 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* TAB CONTENT 4: REGULATORY AUDIT TRAIL */}
-        {activeTab === 'logs' && (
-          <div className="mt-6 glass-card rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
-            <div className="p-5 border-b border-white/10 flex items-center justify-between">
+        {/* MODULE 6: EMI BOOK & OVERDUES */}
+        {activeModule === 'emi-book' && (
+          <div className="glass-card rounded-2xl border border-white/10 p-6 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h2 className="text-base font-bold text-white">Immutable RBI Compliance &amp; Audit Trail</h2>
-                <p className="text-xs text-slate-400">Cryptographically stamped event logs for transactions, approvals, and escrow releases</p>
+                <h3 className="text-base font-bold text-white flex items-center gap-2">
+                  <CreditCard className="h-4 w-4 text-emerald-400" />
+                  EMI Book &amp; Overdue Tracking
+                </h3>
+                <p className="text-xs text-slate-400">
+                  Every active EMI in one view — due and overdue tracking, reminder workflows, follow-up queue
+                </p>
               </div>
-              <button className="flex items-center gap-1.5 rounded-xl border border-white/10 bg-[#0B0F19] px-3 py-1.5 text-xs text-slate-300 hover:text-white transition">
-                <Download className="h-3.5 w-3.5" />
-                <span>Export Audit CSV</span>
+
+              <button
+                onClick={() => showToast('Triggered automated WhatsApp & SMS payment reminder notifications!')}
+                className="rounded-xl bg-gradient-to-r from-indigo-500 to-indigo-600 px-3.5 py-2 text-xs font-bold text-white"
+              >
+                Send Automated Reminders
               </button>
             </div>
 
-            <div className="divide-y divide-white/5">
-              {auditLogs.map((log) => (
-                <div key={log.id} className="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs hover:bg-white/[0.02] transition">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono text-indigo-400 font-semibold">{log.id}</span>
-                      <span className="font-bold text-white">{log.event}</span>
-                    </div>
-                    <p className="text-slate-400 text-[11px]">{log.detail}</p>
-                  </div>
-                  <div className="flex items-center gap-4 text-right text-[11px] text-slate-500">
-                    <div>
-                      <p className="text-slate-300 font-medium">{log.user}</p>
-                      <p>{log.time}</p>
-                    </div>
-                    <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-400 border border-emerald-500/30">
-                      {log.status}
-                    </span>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-[#0B0F19]/80 text-slate-400 uppercase tracking-wider text-[10px] border-b border-white/10">
+                  <tr>
+                    <th className="py-3 px-4">EMI ID</th>
+                    <th className="py-3 px-4">Customer</th>
+                    <th className="py-3 px-4">Appliance</th>
+                    <th className="py-3 px-4">Tenure Progress</th>
+                    <th className="py-3 px-4">Monthly Dues</th>
+                    <th className="py-3 px-4">Due Date</th>
+                    <th className="py-3 px-4 text-right">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  {emiBook.map((e) => (
+                    <tr key={e.id} className="hover:bg-white/[0.02]">
+                      <td className="py-3 px-4 font-mono text-indigo-300 font-bold">{e.id}</td>
+                      <td className="py-3 px-4 text-white font-medium">{e.customer}</td>
+                      <td className="py-3 px-4 text-slate-300">{e.item}</td>
+                      <td className="py-3 px-4 font-semibold text-white">
+                        {e.paidTenure} / {e.totalTenure}
+                      </td>
+                      <td className="py-3 px-4 font-bold text-emerald-400">
+                        ₹{e.amountDue.toLocaleString('en-IN')}
+                      </td>
+                      <td className="py-3 px-4 text-slate-400">{e.dueDate}</td>
+                      <td className="py-3 px-4 text-right">
+                        {e.status === 'OVERDUE' ? (
+                          <span className="rounded-full bg-rose-500/10 px-2 py-0.5 text-[10px] font-bold text-rose-400 border border-rose-500/30">
+                            Overdue (Reminder Sent)
+                          </span>
+                        ) : e.status === 'UPCOMING' ? (
+                          <span className="rounded-full bg-indigo-500/10 px-2 py-0.5 text-[10px] font-bold text-indigo-300 border border-indigo-500/30">
+                            Due in 14 Days
+                          </span>
+                        ) : (
+                          <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-400 border border-emerald-500/30">
+                            Cleared
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* MODULE 7: ORDERS & FULFILMENT */}
+        {activeModule === 'orders' && (
+          <div className="glass-card rounded-2xl border border-white/10 p-6 space-y-4">
+            <div>
+              <h3 className="text-base font-bold text-white flex items-center gap-2">
+                <Truck className="h-4 w-4 text-amber-400" />
+                Orders &amp; Partner Retail Fulfilment Queue
+              </h3>
+              <p className="text-xs text-slate-400">
+                Order queue, vendor or dispatch assignment, delivery status, and returns handling
+              </p>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-[#0B0F19]/80 text-slate-400 uppercase tracking-wider text-[10px] border-b border-white/10">
+                  <tr>
+                    <th className="py-3 px-4">Order ID</th>
+                    <th className="py-3 px-4">Customer</th>
+                    <th className="py-3 px-4">Appliance</th>
+                    <th className="py-3 px-4">Assigned Partner / Logistics</th>
+                    <th className="py-3 px-4">Status</th>
+                    <th className="py-3 px-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  {orders.map((o) => (
+                    <tr key={o.orderId} className="hover:bg-white/[0.02]">
+                      <td className="py-3 px-4 font-mono font-bold text-indigo-300">{o.orderId}</td>
+                      <td className="py-3 px-4 text-white font-medium">{o.customer}</td>
+                      <td className="py-3 px-4 text-slate-300">{o.appliance}</td>
+                      <td className="py-3 px-4 text-slate-400">{o.vendor}</td>
+                      <td className="py-3 px-4">
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-[10px] font-bold border ${
+                            o.status === 'DELIVERED'
+                              ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                              : o.status === 'DISPATCHED'
+                              ? 'bg-indigo-500/10 text-indigo-300 border-indigo-500/30'
+                              : 'bg-amber-500/10 text-amber-400 border-amber-500/30'
+                          }`}
+                        >
+                          {o.status}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        <select
+                          value={o.status}
+                          onChange={(e) => handleUpdateOrderStatus(o.orderId, e.target.value)}
+                          className="rounded-lg border border-white/10 bg-[#0B0F19] px-2 py-1 text-[11px] text-slate-200 outline-none"
+                        >
+                          <option value="PROCESSING">Processing</option>
+                          <option value="DISPATCHED">Dispatched</option>
+                          <option value="DELIVERED">Delivered</option>
+                        </select>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* MODULE 8: WITHDRAWALS & REFUNDS (Maker-Checker Workflow) */}
+        {activeModule === 'withdrawals' && (
+          <div className="glass-card rounded-2xl border border-white/10 p-6 space-y-4">
+            <div>
+              <h3 className="text-base font-bold text-white flex items-center gap-2">
+                <ArrowDownLeft className="h-4 w-4 text-rose-400" />
+                Withdrawals &amp; Refunds (Maker-Checker Dual Controls)
+              </h3>
+              <p className="text-xs text-slate-400">
+                Approval workflow with maker-checker controls on every customer payout before money movement
+              </p>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-[#0B0F19]/80 text-slate-400 uppercase tracking-wider text-[10px] border-b border-white/10">
+                  <tr>
+                    <th className="py-3 px-4">Request ID</th>
+                    <th className="py-3 px-4">Customer</th>
+                    <th className="py-3 px-4">Amount Requested</th>
+                    <th className="py-3 px-4">Target Bank Account</th>
+                    <th className="py-3 px-4">Maker Step</th>
+                    <th className="py-3 px-4 text-right">Checker Step</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  {withdrawals.map((w) => (
+                    <tr key={w.id} className="hover:bg-white/[0.02]">
+                      <td className="py-3 px-4 font-mono font-bold text-indigo-300">{w.id}</td>
+                      <td className="py-3 px-4 text-white font-medium">{w.customer}</td>
+                      <td className="py-3 px-4 font-bold text-emerald-400">
+                        ₹{w.amount.toLocaleString('en-IN')}
+                      </td>
+                      <td className="py-3 px-4 text-slate-300">{w.accountNumber}</td>
+                      <td className="py-3 px-4">
+                        {w.makerStatus === 'VERIFIED' ? (
+                          <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-400 border border-emerald-500/30">
+                            ✓ Verified by Maker
+                          </span>
+                        ) : (
+                          <button
+                            onClick={() => handleMakerApprove(w.id)}
+                            className="rounded bg-indigo-600 px-2.5 py-1 text-[10px] font-bold text-white"
+                          >
+                            Verify as Maker
+                          </button>
+                        )}
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        {w.checkerStatus === 'APPROVED_AND_SETTLED' ? (
+                          <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-400 border border-emerald-500/30">
+                            ✓ Settled via IMPS
+                          </span>
+                        ) : w.checkerStatus === 'PENDING_APPROVAL' ? (
+                          <button
+                            onClick={() => handleCheckerConfirm(w.id)}
+                            className="rounded bg-emerald-500 px-2.5 py-1 text-[10px] font-bold text-black"
+                          >
+                            Checker Authorize
+                          </button>
+                        ) : (
+                          <span className="text-slate-500 text-[11px]">Waiting Maker</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* MODULE 9: CONTENT & ANNOUNCEMENTS */}
+        {activeModule === 'content' && (
+          <div className="glass-card rounded-2xl border border-white/10 p-6 space-y-6">
+            <div>
+              <h3 className="text-base font-bold text-white flex items-center gap-2">
+                <Megaphone className="h-4 w-4 text-amber-400" />
+                Content Management &amp; Customer Announcements
+              </h3>
+              <p className="text-xs text-slate-400">
+                Manage banners and product highlights; send push, SMS, or WhatsApp messages to customer segments
+              </p>
+            </div>
+
+            <div className="grid gap-6 lg:grid-cols-2">
+              <div className="rounded-2xl bg-[#0B0F19] p-5 border border-white/5 space-y-4">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-300 block">
+                  Broadcast Direct Message
+                </span>
+
+                <div>
+                  <label className="text-[11px] text-slate-400 block mb-1">Broadcast Channel</label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {(['whatsapp', 'sms', 'push'] as const).map((ch) => (
+                      <button
+                        key={ch}
+                        type="button"
+                        onClick={() => setAnnouncementChannel(ch)}
+                        className={`rounded-xl py-2 text-xs font-bold uppercase ${
+                          announcementChannel === ch
+                            ? 'bg-indigo-600 text-white'
+                            : 'bg-white/5 text-slate-400'
+                        }`}
+                      >
+                        {ch}
+                      </button>
+                    ))}
                   </div>
                 </div>
+
+                <div>
+                  <label className="text-[11px] text-slate-400 block mb-1">Message Text</label>
+                  <textarea
+                    rows={4}
+                    value={announcementText}
+                    onChange={(e) => setAnnouncementText(e.target.value)}
+                    className="w-full rounded-xl border border-white/10 bg-[#131B2E] p-3 text-xs text-white outline-none focus:border-indigo-500"
+                  />
+                </div>
+
+                <button
+                  onClick={() =>
+                    showToast(
+                      `Broadcast sent to 1,260 active savers via ${announcementChannel.toUpperCase()} gateway!`
+                    )
+                  }
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-indigo-600 py-3 text-xs font-bold text-white shadow-lg shadow-indigo-500/25"
+                >
+                  <Send className="h-4 w-4" />
+                  <span>Send Broadcast to 1,260 Savers</span>
+                </button>
+              </div>
+
+              <div className="rounded-2xl bg-[#0B0F19] p-5 border border-white/5 space-y-4">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-300 block">
+                  Active Web Banners
+                </span>
+                <div className="space-y-2 text-xs">
+                  <div className="p-3 rounded-xl bg-white/[0.03] border border-white/5 flex items-center justify-between">
+                    <div>
+                      <div className="font-bold text-white">Top Banner: "Save a little. Bring home a lot."</div>
+                      <div className="text-[10px] text-emerald-400">Status: Active on Homepage</div>
+                    </div>
+                    <span className="rounded bg-emerald-500/20 text-emerald-400 px-2 py-0.5 text-[10px] font-bold">Live</span>
+                  </div>
+                  <div className="p-3 rounded-xl bg-white/[0.03] border border-white/5 flex items-center justify-between">
+                    <div>
+                      <div className="font-bold text-white">Promotional: "Whirlpool Double-Door Fridge at ₹1,000/mo"</div>
+                      <div className="text-[10px] text-slate-400">Target: All Customers with fund &gt; ₹3,000</div>
+                    </div>
+                    <span className="rounded bg-emerald-500/20 text-emerald-400 px-2 py-0.5 text-[10px] font-bold">Live</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* MODULE 10: REPORTS & EXPORTS */}
+        {activeModule === 'reports' && (
+          <div className="glass-card rounded-2xl border border-white/10 p-6 space-y-6">
+            <div>
+              <h3 className="text-base font-bold text-white flex items-center gap-2">
+                <FileSpreadsheet className="h-4 w-4 text-emerald-400" />
+                Reports &amp; Data Exports (CSV / Excel)
+              </h3>
+              <p className="text-xs text-slate-400">
+                Fund, collections, EMI, sales, and customer reports with instant CSV and Excel download
+              </p>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {[
+                { name: 'Double-Entry Fund Ledger Report', desc: 'All debit & credit journal entries' },
+                { name: 'UPI AutoPay Collections Master', desc: 'Gateway settlement & mandate breakdown' },
+                { name: 'Active EMI Book & Schedule Report', desc: 'Instalment schedule and repayments' },
+                { name: 'Overdues & Default Analysis Report', desc: 'Risk tracking and reminders queue' },
+                { name: 'Appliance Sales & Fulfilment Master', desc: 'Delivered vs in-transit orders' },
+                { name: 'Customer KYC & Accounts Directory', desc: 'Full KYC & contact master list' }
+              ].map((rep) => (
+                <div
+                  key={rep.name}
+                  className="rounded-2xl bg-[#0B0F19] p-5 border border-white/5 flex flex-col justify-between space-y-3"
+                >
+                  <div>
+                    <h4 className="text-xs font-bold text-white">{rep.name}</h4>
+                    <p className="text-[11px] text-slate-400 mt-0.5">{rep.desc}</p>
+                  </div>
+                  <button
+                    onClick={() => showToast(`Generating and exporting ${rep.name} (CSV)...`)}
+                    className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-white/5 py-2 text-xs font-semibold text-slate-200 hover:text-white hover:bg-white/10 cursor-pointer"
+                  >
+                    <Download className="h-3.5 w-3.5" />
+                    <span>Export CSV</span>
+                  </button>
+                </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* MODULE 11: ROLES & AUDIT LOG */}
+        {activeModule === 'audit' && (
+          <div className="glass-card rounded-2xl border border-white/10 p-6 space-y-4">
+            <div>
+              <h3 className="text-base font-bold text-white flex items-center gap-2">
+                <ShieldAlert className="h-4 w-4 text-indigo-400" />
+                Roles &amp; Immutable Audit Log
+              </h3>
+              <p className="text-xs text-slate-400">
+                Role-based access for your team with a complete, time-stamped audit trail
+              </p>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-[#0B0F19]/80 text-slate-400 uppercase tracking-wider text-[10px] border-b border-white/10">
+                  <tr>
+                    <th className="py-3 px-4">Audit ID</th>
+                    <th className="py-3 px-4">Authorized User &amp; Role</th>
+                    <th className="py-3 px-4">Action Executed</th>
+                    <th className="py-3 px-4">Detail Record</th>
+                    <th className="py-3 px-4">Timestamp</th>
+                    <th className="py-3 px-4 text-right">Client IP</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  {auditLogs.map((log) => (
+                    <tr key={log.id} className="hover:bg-white/[0.02]">
+                      <td className="py-3 px-4 font-mono font-bold text-indigo-300">{log.id}</td>
+                      <td className="py-3 px-4 text-white font-medium">{log.user}</td>
+                      <td className="py-3 px-4 font-semibold text-emerald-400">{log.action}</td>
+                      <td className="py-3 px-4 text-slate-300">{log.detail}</td>
+                      <td className="py-3 px-4 text-slate-400">{log.time}</td>
+                      <td className="py-3 px-4 text-right font-mono text-slate-400">{log.ip}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         )}
